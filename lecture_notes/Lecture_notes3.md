@@ -33,10 +33,11 @@ int main(){
 }
 ```
 (note that you need a definition a function in the "main" file here)
+NB: void hello(); questo all'inizio serve per dichiarare che userò la funzione hello
 
 Now we can do `g++ -c main.cpp hello.cpp` and `g++ -o hello.x hello.o main.o`.
 
-You might have many different functions though, and cluttering the "main" file with their declarations will become unreadable soon. So, to group them, you can put all the definitions into a _header file_.
+You might have many different functions though, and cluttering the "main" file with their declarations will become unreadable soon (non voglio stare a dichiarare tutto... che pizza). So, to group them, you can put all the definitions into a _header file_. (è un file di testo ove metto tutte le dichiarazioni delle funzioni che mi servono nel main).
 
 
 #### Header files
@@ -244,17 +245,43 @@ filevar.open("test.txt", std::ios_base::app);
 ### Test Yourself
 
  - How do you create an object file with `g++`?
- - Why can't you just have eveything in one file?
+ - `g++ -c main.cpp`
+ 
+ - Why can't you just have everything in one file?
+ - Becuase it may be very confusing, extremly long and hard-to-read + other problems: if i change only one little part, I have cmq to recompile the entire file and this is inefficient.
+ 
  - What is the purpose of a "header guard"?
+ - It is to not include twice one library, ore one function prototype etc...
+ 
  - What does `-IFOLDER_NAME` mean when passed to `g++`?
+ - The compiler will look in the FOLDER_NAME directory for the definition of what he needs.
+ 
  - Do tabs matter in a `Makefile`?
+ - YES!!!!
+ 
  - What does `$@` mean in a `Makefile`?
+ - evaluates the name of the current target
+ 
  - What does `$^` mean in a `Makefile`?
+ - evaluates to filenames of all the prerequisites, separated by spaces.
+ 
+ - hat does `$<` mean in a `Makefile`?
+ - evaluates to the name of the first dependency
+ 
  - How to use `make` with a makefile that is not named `Makefile`?
+ -  `make -f MyMakefileName`
+ 
  - What does it mean if a function is a friend of a class?
+ - friend is used to grant our function the access to private data. Inoltre when we use friend, la funzione che vado a definire è trattata come fosse non-member della classa (i.e. come se fosse definita fuori dalla classe).
+ 
  - Why should non-class member operators be friends of classes?
+ -??????????????
+ 
  - Which header do you need to include to work with files?
+ - `#include <fstream>`
+ 
  - How do you open a file in append mode?
+ - passing as second argument `std::ios_base::app` to the .open() function.
 
 
 #### All the code snippets below have mistakes, find them:
@@ -275,7 +302,43 @@ int main(){
 }
 
 ```
+Correct:
+```
+class CCoords{
+    double x;
+    double y;
+public:
+    CCoords();// costruttore predefinito //{x=0;y=0;} se aggiungo questo, mettto che di default sono 0
+    CCoords(const double& x0,const double& y0):x(x0),y(y0){}; // custom constructor
 
+friend CCoords operator+(const CCoords& c, const int& b);
+friend CCoords operator+(const int& b, const CCoords& c);
+};
+
+ CCoords operator+(const CCoords& c, const int& b) {
+    CCoords result;
+    result.x = c.x + b;
+    result.y = c.y + b;
+    return result;
+}
+
+
+ CCoords operator+(const int& b, const CCoords& c) {
+    CCoords result;
+    result.x = c.x + b;
+    result.y = c.y + b;
+    return result;
+}
+
+
+int main(){
+    CCoords c(1,3);
+    //c.x=0;c.y=3;
+    auto cc=2+c;
+    return 0;
+}
+
+```
 Snippet 2
 ```
 //BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
@@ -293,6 +356,25 @@ int main(){
 }
 
 ```
+Correct:
+```
+class MyClass{
+public:
+  int x;
+  MyClass(){x=0;}
+  friend std::ostream& operator<<(std::ostream& os, const MyClass& m);
+};
+
+std::ostream& operator<<(std::ostream& os, const MyClass& m){
+    os<<m.x<<std::endl;
+    return os;
+};
+
+int main(){
+    MyClass m;
+    std::cout<<m<<std::endl;
+}
+```
 
 Snippet 3:
 ```
@@ -306,6 +388,11 @@ for(int i=0;i<N;i++){
 }
 
 ```
+Correct:
+```
+
+```
+
 
 ### Exercises:
 

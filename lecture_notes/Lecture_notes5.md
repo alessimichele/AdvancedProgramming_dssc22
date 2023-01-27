@@ -3,14 +3,22 @@
 ### Memory management
 
 #### C-like style memory management 
+Memoria: divisa in due… stack(piccola e veloce) e heap (più grande e più lenta).
+Stack: small specific memory area available to our program
 
+The memory that I don’t manually allocate (es int a=2) va nello stack
+
+Se voglio roba più grande, array ad es, devo dire al programma di mettere questo oggetto in un altra parte (nell heap)… in questo contesto uso delle funzioni che sono i memory allocator
+
+Using the pointer I can allocate memory (in C malloc, calloc and free to de allocate)
+###
 So far we have only seen pointers in a context of pointing to an existing variable or passing something to a function. It has been mentioned that c-style arrays are actually pointers, but without going into details.
 
 The memory your program uses is divided into a "heap" and a "stack". Stack is small (and thus fast), heap is as big as your operative memory allows.
 To allocate the memory on a "heap", use `new`, to free it, use `delete` or `delete[]`:
-
+NB new alloca nell heap, esattamente come fa il mallock in C.
 ```
-int* p1 =new int;
+int* p1 =new int; // cosi facendo il puntatore, come variabile (che al suo interno ha un indirizzo di memoria), è salvato dentro lo stack, ma l'indirizzo di memoria a cui sta puntando è nella heap.
 int* p =new int[N];
 for(int i=0;i<N;i++){
     p[i]=i;
@@ -21,6 +29,11 @@ delete[] p;
 
 If you are only allocating one object and not an array, use `delete` without brackets:
 
+NB se non faccio il delete, la memoria resta occupata... il programma chide al sistema operativo di dargli sempre nuova memoria... MEMORY LEAK-> WHEN ALLOCATE MEMORY BUT NOT DEALLOCATE
+
+valgrind --leak-check=full ./a.out
+
+per vedere se ho fatto dei memory leak... ancora meglio se compilando metto g++ -g -o ... il -g mi da info di debug
 ```
 int* p =new int;
 ...
@@ -69,7 +82,7 @@ A=B;
 
 It will crash.
 The compiler doesn't know how to make a "deep copy", you need to tell it:
-
+(senza questo codice, ho due istanze diverse della stessa classe ma con lo stesso puntatore)
 ```
 template <typename T>
 CMyClass<T>& CMyClass<T>::operator=(const CMyClass<T>& p){
@@ -95,7 +108,11 @@ return *this;
 };
 
 ```
+Destructor is obbligatory function in each class which has dynmaic memory. I need to free the memory.
+Io il destructor devo solo averlo definito.... non devo chiamarlo... lui si "chiama da solo" prima che lo scope muoia... quindi se uso una classe dentro uno scope {}... prima dela } di chiusura il deconstructor si chiama da solo.
 
+NB: VECTOR: with std::vector i don t have to do this stuff... is in pratica a class che da sola chiama new e poi de alloca con delete... ma io non vedo nulla.... faccio tipo in python senza pensare. 
+Ma se lavoro con codice che va con C o ho restrizione etc... magari devo fare tutto io e quindi non posso usare vector
 
 Note, that if you overload `+` operator, and then call `C=A+B`, the `=` will actually never get called due to the process called ["copy elision"](https://en.cppreference.com/w/cpp/language/copy_elision).
 
@@ -178,11 +195,15 @@ If you need to pass the pointer to a C-Style function, use p.get() to get the ra
 #### Test Yourself:
 
  - how do you allocate a dynamic array in C++?
+ use 'new'.
  - whats the difference between `delete` and `delete[]`?
  - when do you need to overload assignment operator for your class?
+ it is used to copy values from one object to another already existing object. Need to use when i need to do a deep copy of an object, cioe quando ho un oggetto dinamico di una classe, e ci faccio una copia prendendo un altro puntatore che punta a un altra zona di memoria e copiando i valori del vecchio oggetto nel nuovo
  - when do you need to create a copy constructor for your class?
+ when i have to deal with pointers inside my class
  - when do you need to create a move constructor for your class?
  - what should you do if your class allocates resources, but you are sure you will never need a copy constructor?
+ mettere = delete alla fine del constructor.
 
 
 ### Exercise1:

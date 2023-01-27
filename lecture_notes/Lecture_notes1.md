@@ -120,6 +120,8 @@ var.y=3;
 
 The difference of `class` from `struct` is that by default all it's members are "private" and the `var.x` call wouldn't work "outside the class". Usually, if you only have public members, it's recommended to use `struct`, but I prefer avoiding it to not confuse people who came from `C` and just putting the `public` keyword at the start (more information about `public` and `private` variables will be given when we discuss classes in-depth).
 
+Quando faccio una `struct`, accedo alle variabili con `var.x` e `var.y`, e posso accedervi da dove voglio nel programma. Di default, quando creo una `struct` ogni altra funzione può accedervi. La classe invece è privata
+
 ```
 class CAnotherCoords{
 public:    
@@ -127,7 +129,9 @@ public:
     double y;
 };
 ```
-
+NB di default, class are private and struct is public. We can also make a struct private 
+with the kewword: "private:".
+We can also have something private and something public.
 
 ### Control Flow
 
@@ -145,7 +149,7 @@ if (TEST_EXPRESSION){
 Examples for `TEST_EXPRESSION`: `if(x==0)`, `if(x!=0)`, `if(x<0)`, `if((x>=0)&&(y<0))`, `if((x==2)||(y<0))`
 
 Note: due to how floating point numbers are represented, you cannot use `==` to compare them, always compare the difference to some small number instead.
-
+Quello che devo fare per vedere se x=y con x,y floating point (con la virgola) è calcolare |x-y| e verificare che questa differenza sia prossima a 0.
 
 #### loops 
 *no fancy c++ loops today, we stick to c for now*
@@ -211,7 +215,7 @@ switch (expression)
 
 ### Static Arrays
 
-You can group the elements of one type into an array. For now we do not "work with memory", but remember that only small amounts of data can be put into a static array the way we introduce it.
+You can group the elements of one type (NB OF ONE TYPE) into an array. For now we do not "work with memory", but remember that only small amounts of data can be put into a static array the way we introduce it.
 
 To create an array, write:
 
@@ -227,9 +231,10 @@ for (int i=0;i<5;i++){
     a[i]=i;
 }
 ```
-Note that `arr[5]` does not exist!
+Note that `arr[5]` does not exist!... ma cmq non mi da errore se "sbaglio" di poco... cannot know if there s a problem immediately.
 
 **Accessing arrays out of bounds causes undefined behavior and (possibly) "segmentation fault"**
+Succede quanto chiedo all'array to access something which is tipo 100th out the bounds of the array.
 
 "Undefined behaviour" means that your program might work just fine a hundred times and then fail when you submit it and the user runs it or when you run it the 101th time, it's the worst kind of bug.
 
@@ -288,6 +293,19 @@ std::cin >> x >>y;
  - how do you define a static array of type int and size 7?
  - what can you use to read interactive user input?
 
+Risposte:
+-int, long int, char, long long int, double, bool
+-when we have a numeric value that is outside the range that can be represented with a given number of digits
+-???
+-<iostream> ???
+-int main(){
+
+}
+- in struct the default accesibility is pubblic , in class it is private
+- it ends the loop and move to the first command outside the loop
+- we jump tot he next iteration (ie ends the current iteration of the loop)
+- int array_name[7]
+-std::cin>>
 
 #### All the code snippets below have mistakes, find them:
 
@@ -299,12 +317,18 @@ if (a=b){
     std::cout<<"equal"<<std::endl
 }
 ```
+there isn't  the "main"
+missin ";" after std::cout<<"equal"<<std::endl
+"a==b"
+
 
 Snippet 2:
 ```
 {int a{2};}
 a=4;
 ```
+a variable is accessible only inside the `{}` brackets... here "a" is nothing outside `{}`.
+`error:  use of undeclared identifier 'a'`
 
 Snippet 3
 ```
@@ -314,6 +338,7 @@ if(x==y){
     std::cout<<"x is equal to y"<<std::endl;
 }
 ```
+We cannot use == with double (in general with floating point). We have to consider their difference.
 
 Snippet 4:
 ```
@@ -324,6 +349,7 @@ while (x<10){
    y++;
 }
 ```
+This is an infinite loop
 
 Snippet 5:
 ```
@@ -333,6 +359,7 @@ for (int i=0;i<=10;i++){
   ar[i]=i;
 }
 ```
+`ar` has 10 elements, but we put inside it 11 elements. Should be int i=0;i<10;i++
 
 Snippet 6:
 ```
@@ -349,8 +376,13 @@ int main(){
   return 0;
 }
 ```
-
-
+struct is public by defalut. We set to private, so we cannot access its values. We should remove "private".
+missing `;` after
+struct mystruct{
+private:
+  int a;
+  int b;
+}
 
 
 ### Actual Exercises:

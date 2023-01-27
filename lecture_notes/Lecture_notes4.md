@@ -7,7 +7,10 @@ extra reference book:
 "C++ Templates: The Complete Guide 1st Edition"
 by David Vandevoorde 
 
+
 #### Function templates
+the template are iniziated (and instanced) at compile time
+
 
 What if you want to write a function to print different types of data? You would need to overload your `print()` function for every type you are going to use it with. It becomes cumbersome very fast and makes code hard to maintain if new types are added. Luckily, in c++ there is an easy solution: templates.
 
@@ -29,6 +32,14 @@ print<int>(a);
 You can also have different templated arguments if you need. 
 
 Templates need to be "instantiated" by the compiler at compile time, thus if you separate the declarations and definitions into different files as is done in `C`, you have to instatiate it manually. In many cases, that almost defeats the purpose of using templates and, unless working with projects where you care for executable size, can be avoided by simply creating "a header only library", that is, putting all the function/class definitions entirely into header files.
+
+Se faccio dei progetti, ho nel main l utilizzo dei template, in un header ho le dichiarazioni dei template e nel fie in src ho i prototipi dei template. Il problema è che quando faccio make della progetto, compilo prima src e dopo il main, e quando compilo src, il compolatore non sa QUALI TIPI DEVE USARE PER COMPPILARE; INFATTI IO I TIPI CHE DEVE UARE GLIELI PASSO SOLO NEL MAIN, CHE PERO VIENE COMPILATO DOPO... QUINDI LUI NON SA COSA FARE...
+Questo lo risolvo mettendo una lista di tutti i possibili tipi che usero nel template (sia i tipi dei parametri che passo, sia i tipi di quello che deve ritornare la funzione... devo mettere tutte le combinazioni che mi possono servire....  QUESTO è IL GRANDE GRANDE CONTRO DEI TEMPLATE )
+
+POSSIBILE SOLUZIONE... non fare makefile e fare tutto nello stesso file, quindi non c'è problema. Quindi avrò solo il main che punta a un header.hpp, e nell header ci metto tutto... dichiarazioni dei template insieme direttamente con le implementazioni!!!!!!
+SO PUT ALL INSIDE THE HPP HEADER FILE!!! IT MAKES OUR LIFE EASIER.
+
+FROM NOW ON, NO MORE FUNCTIONS BUT DO ONLY TEMPLATE (THAT ACTUALLY IS A FUNCTION, BUT TEMPLATED :)) IT IS MORE FLEXIBLE AND ALLOW US TO DONT USE SRC AND PUT ALL INSIDE THE HEADER.
 
 #### Class templates
 
@@ -70,6 +81,9 @@ CMyClass<int> var;
 ```
 
 #### Non-type template parameters:
+Da usare se abbiamo una funzione o una classe che dipendono da un numero, ma la dipendenza da queato numero avviene at the compiling time.
+To use with compile-time-parameter.
+(Usabili anche con la ricorsione... passando al prossimo stadio della ricorsione il template ma con N=N-1)???
 
 In addition to templating functions/classes on types, we can also template them on "integer" numbers. By "integer" here is meant anything that is mathematically integer, not just `int`.
 
@@ -90,7 +104,7 @@ int main(){
 #### Template specialization:
 
 You can make the compiler produce very different functions based on the type. This is useful when dealing with old C-interface or when some operations are not permitted for certain types.
-
+Se non compila, aggiungere alla fine di g++ -o... -std=c++17
 ```
 #include <typeinfo>
 
@@ -141,6 +155,7 @@ void myPrint(const T& arg, const Types&... args){
 ```
 You need the "normal" print function here to stop the recursion.
 
+In generale, quando ho piu parametri scrivo ricorsivamente (è meglio).
 
 ### STL containers: std::array and std::vector
 
@@ -161,6 +176,17 @@ std::array<int,5> arr;//you need to pass the number of elements just like with t
 
 ### std::vector
 
+Utili quando non mi frega del memory management... con gli array è tipo c invece, devo allocare la memoria e poi de allocarla.
+
+vector fa da solo tutto quello che fanno mallock e free.
+Solo nel caso in cui voglio fare io memory management NON uso i vector. (NB non è vero che i vector sono più lenti degli array di C se li si sanno usare bene)
+
+NB gli array sono inizializzati (come mallock)
+i vector non lo sono (come i callock)
+
+NBNBNBNB non fare push_back... se il nuovo elemento me lo deve mettere nella allocazione di memoria successiva che però è occupata, lui deve copiare tutto e aggiungere da un altra parte... lentissimo. It will reallocate (realloc in C)
+
+La cosa migliore è usare un vector come se fosse un array (quindi con grandezza fissata)... e so che semmai dovesse servire posso resaizare.
 ```
 include <vector>
 ```

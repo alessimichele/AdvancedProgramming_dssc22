@@ -75,15 +75,21 @@ void add_two_ref(int& a){
 
 This is called passing by reference.
 
+Pass-by-reference means to pass the reference of an argument in the calling function to the corresponding formal parameter of the called function.
+
 Note that if you do
 
 ```
-void add_two_ref(int a){
+void add_two_wrong(int a){
     a=a+2;
 }
 ```
 
 your variable will not get changed.
+Facendi cosi, succede questo in pratica:
+tu mi passi a, io (funzione) ne faccio una copia e lavoro su quella , quindi incremento la copia di 2 ma poi butto via quanto ho fatto.
+
+Nel modo precedente invece (ossia col reference) io passo a, e la funzione lavora esattamente su quell' a senza fare una copia... nella pratica la funzione prende l'indirizzo di memoria di a (che ha grazie al fatto che passo a by reference) e lavora su quello, quindi a risulterà effettivamente modificato.
 
 In C, you could only do:
 ```
@@ -144,7 +150,8 @@ To get access to a, we need to **dereference** a pointer by placing a `*` before
 ```
 std::cout<< *pointer << std::endl;
 ```
-
+Con *pointer mi stampa il contenuto di a.
+Con solo pointer (senza * iniziale), stampa invece l'indirizzo di memoria dove a è stipato.
 A reference is defined with the `&` and *should be initialized at declaration*. **This is not the same `&` as we had when taking the address,** so things might look confusing at first. Do "play around" with example files to understand what's going on.
 
 ```
@@ -253,6 +260,99 @@ void CCoords::print() {
  - What is a recursive function?
  - What is the role of a constructor in a class?
  - How can we change private member variables of a class?
+ 
+## Risposte
+
+- A reference variable is an alias, that is, another name for an already existing variable.
+- Pass a variable by value would works only if we return another variable (in this case, the output variable is a new variable, and the input variable remains itself). Passing by reference works if we want to modify the parameter inside the function: in this case, i pass to the function an alias of my variable, that is: the funcion will no longer create a new variable, but will "work directly" on the memoty allocation of the input value I pass to the function.
+```
+#include <iostream>
+
+int add_two(int a){
+    return a+2;
+}
+
+int main(){
+    int a;
+    a = 1;
+    std::cout<<"inizio"<<a<<std::endl;
+    int *p = &a;
+    std::cout<<p<<std::endl;
+    add_two(a);
+    std::cout<<"dopo"<<a<<std::endl;
+    std::cout<<p<<std::endl;
+    return 0;
+}
+
+//output
+//inizio1
+//0x16fd73428
+//dopo1
+//0x16fd73428
+```
+```
+#include <iostream>
+
+void add_two(int &a){
+    a = a+2;
+}
+
+int main(){
+    int a;
+    a = 1;
+    std::cout<<"inizio"<<a<<std::endl;
+    int *p = &a;
+    std::cout<<p<<std::endl;
+    add_two(a);
+    std::cout<<"dopo"<<a<<std::endl;
+    std::cout<<p<<std::endl;
+    return 0;
+}
+
+//output:
+//inizio1
+//0x16b30f428
+//dopo3
+//0x16b30f428
+```
+
+- Because passing variables by pointers could lead to problem if we forget if we are handling variables or arrays.
+- I have to pass the function the address of `int x`, that is `&x`.
+More complex solution:
+Create a pointer on x and pass it, that is:
+```
+int function(int* a){...}
+int x;
+int *p;
+p = &x;
+function(p)
+```
+The latter solution is exactly the same of passing  `&x`. Actually:
+```
+int x;
+int *p;
+p = &x; //create a pointer to x. Inside p we have the adress of x.
+
+&x //is DIRECTLY the adress of p.
+```
+
+- Because it makes us sure that our code will not change. A non-const variable can be passed to a function that accepts const parameters. But poi if we modify our non-const variable, we'll have trouble.
+
+- If I have a pointer `p`, I access the value of the variables it points to by doing dereference operation `*p`.
+
+- In the pointer variable itself is stored the memory address of the variable which the pointer points to.
+
+- `void function()`: this function does not return any value after execution.
+
+- `auto`: when we are not sure about the type that a function returns, we can use auto. Even if we don t want to specify what type our function return, we use it. (We can use it also to declare a variable with a complicated type:  you can use auto to declare a variable where the initialization expression involves templates, pointers to functions, or pointers to members).
+
+- We can have more than one function with the same name, but with different type/number of type in the input parameters. The compiler will not complain. (You can have different functions with the same name if they have a different number of type of the input parameters). NB OVERLOADING APPLY ONLY ON ARGUMENT TYPE AND NUMBER OF ARGUMENT (se ho due funz con stesso nome ma diversi tipi negli argument o deverso numero di parametri, funziona. Se invece ho stesso numero din parametri e dello stesso tipo e cambia SOLO il return type, beh questo non posso farlo.)
+
+- It is a function which calls itself.
+
+- Its role is to initialize some valid values for the class members variables (of an object). It ha the same name of the class, say "C". If we don t want it, put C()= delete;
+
+- How can we change private member variables of a class? We can modify the setting at the beginning by setting the class to be "public".
 
 #### All the code snippets below have mistakes, find them:
 (if you cannot see the error, type this in an IDE or try to compile)
@@ -270,6 +370,20 @@ int main(){
     return 0;
 }
 ```
+Correct:
+```
+//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
+void add_two(int *a){
+    *a=*a+2;
+}
+int main(){
+    int var{0};
+    add_two(&var);
+    std::cout<<var<<std::endl;
+    return 0;
+}
+```
+
 Snippet 2:
 ```
 //BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
@@ -277,6 +391,22 @@ void swap(int a, int b){
    int temp{a};
    a=b;
    b=a; 
+}
+int main(){
+   int var1{8}, var2{9};
+   swap(var1,var2);
+   std::cout<<var1<<" "<<var2<<std::endl;
+   return 0;
+}
+```
+Correct:
+```
+//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
+void swap(int &a, int &b){
+   int temp;
+   temp = a;
+   a=b;
+   b=temp; 
 }
 int main(){
    int var1{8}, var2{9};
@@ -300,7 +430,25 @@ int main(){
    return 0;
 }
 ```
+Correct:
+```
+class CMyClass{
+public:
+    int a;
+    CMyClass(int x):a(x){};
+    
+    void display(){
+        std::cout<<a;
+    }
+};
 
+int main(){
+   CMyClass c(7);
+   std::cout<<"this works"<<std::endl;
+   c.display();
+   return 0;
+}
+```
 Snippet 4:
 ```
 int main(){
@@ -310,7 +458,7 @@ int& y;
 ......
 }
 ```
-
+!!!!References has to be delcared and initialized at the same time!!!! I CANNOT ONLY DECLARE A REFERENCE.
 
 ### Exercises:
 
