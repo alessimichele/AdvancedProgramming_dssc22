@@ -1,13 +1,14 @@
-#include "eq.hpp"
+#include "include/eq.hpp"
+
 
 
 int main(){
-    eq equation;
-    equation.coeff.ask_for_input();
-    equation.coeff.print();
+    Equation eq;
+    eq.coeff.ask_for_input();
+    eq.coeff.print();
     
-    equation.solve();
-    equation.print_solution();
+    eq.solve();
+    eq.print_solution();
 
     return 0;
 }
