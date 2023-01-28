@@ -7,7 +7,7 @@ public:
 
     Complex(){re=0; im=0;}
     
-    Complex(const double x, const double y){
+    Complex(const double& x, const double& y){
       re=x;im=y;  
     }  
 

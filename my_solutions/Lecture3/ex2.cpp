@@ -8,7 +8,7 @@ public:
     Complex(){
       re=0;im=0;  
     }  
-    Complex(const double x0, const double y0):re(x0),im(y0){}
+    Complex(const double& x0, const double& y0):re(x0),im(y0){}
 
     friend Complex operator+(const Complex &z1, const Complex &z2);
     friend Complex operator-(const Complex &z1, const Complex &z2);
