@@ -411,7 +411,7 @@ Reorganize the code of the exercises 1 and 2 from the last lecture into the prop
 
 Create a class for complex numbers and make sure that all the arithmetic operations are defined for it. Also, overload the `<<` operator for it. 
 
-#### Exercise 4:
+#### Exercise 3:
 (prerequisite: exercise 2 of Lecture 2)
 
 Add a function to read and write from file into your quadratic equation solution exercise. There should be an option to read the coefficient from file and a file "solution_history.txt" that keeps track of all the equations that you have solved.
