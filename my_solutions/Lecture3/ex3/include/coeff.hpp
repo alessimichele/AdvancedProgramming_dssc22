@@ -2,6 +2,7 @@
 #define COEFF_H
 #include <iostream>
 #include <string>
+#include <fstream>
 
 class coeff{
 public:
@@ -19,6 +20,8 @@ public:
 
     void print();
 
+    void coeff_from_file(std::string filename);
+
 };
 
 void coeff::ask_for_input(){
@@ -34,4 +37,14 @@ void coeff::ask_for_input(){
 void coeff::print(){
     std::cout<<"Your coefficients are: "<<a<<", "<<b<<", "<<c<<std::endl;
 }
+
+
+void coeff::coeff_from_file(std::string filename){
+    std::ifstream filevar(filename);
+    if (filevar)
+    {
+        filevar >> a>> b>> c;
+    };
+}
+
 #endif

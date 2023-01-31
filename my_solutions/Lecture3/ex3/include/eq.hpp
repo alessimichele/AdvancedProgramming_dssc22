@@ -4,6 +4,8 @@
 #include <cmath>
 #include "coeff.hpp"
 #include "complex.hpp"
+#include <string>
+#include <fstream>
 
 class Equation{
 public:
@@ -14,6 +16,8 @@ public:
     void print_solution();
 
     void solve();
+
+    void solution_to_file(std::string filename);
 
 };
 
@@ -36,4 +40,14 @@ void Equation::print_solution(){
     std::cout<<"First solution: "<<sol1.re<< " + "<<sol1.im <<"i" <<std::endl;
     std::cout<<"Second solution: "<<sol2.re<< " + "<<sol2.im<<"i" <<std::endl;
 }
+
+
+void Equation::solution_to_file(std::string filename){
+    std::ofstream filevar;
+    filevar.open(filename, std::ios_base::app);
+    filevar << sol1.re<<" + "<<sol1.im<<"i,   "<<sol2.re<<" + "<<sol2.im<<"i"<< std::endl;
+    filevar.close();
+}
+
+
 #endif
