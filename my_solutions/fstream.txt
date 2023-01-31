@@ -1,0 +1,88 @@
+std::string filename meaning
+In C++, std::string filename is a variable of type std::string that stores the value of a file name as a string.
+
+
+
+alessimichele00@yahoo.it
+how to include std::string
+In C++, to use std::string, you need to include the header file <string>:
+
+c
+Copy code
+#include <string>
+
+
+
+alessimichele00@yahoo.it
+void Equation::solution_to_file(std::string filename){
+    std::ofstream filevar;
+    filevar.open(filename, std::ios_base::app);
+    filevar << sol1.re<<" + "<<sol1.im<<"i,   "<<sol2.re<<" - "<<sol2.im<<"i"<< std::endl;
+    filevar.close();
+}
+This code is a member function of the Equation class, called solution_to_file. It takes as an argument a std::string named filename, which represents the name of the file to which the solution of an equation will be written.
+
+The function starts by creating an instance of std::ofstream named filevar, which is used to write data to a file. The open method of filevar is then called to open the file specified by filename, and it opens the file in append mode (std::ios_base::app), which means that new data is added to the end of the file, rather than overwriting the existing contents.
+
+Next, the solution of the equation is written to the file, using the << operator to insert the real and imaginary parts of the solutions (sol1 and sol2) into the file. Finally, the close method of filevar is called to close the file.
+
+
+
+alessimichele00@yahoo.it
+what is a std::ofstream instance?
+std::ofstream is a standard library class in C++, which provides a stream for writing data to a file. An instance of std::ofstream is an object that is used to write data to a file. It can be used to open a file, write data to the file, and close the file. The open method of std::ofstream is used to open a file for writing, and the close method is used to close the file when you are finished writing to it.
+
+
+
+alessimichele00@yahoo.it
+how to include it?
+To use std::ofstream in C++, you need to include the header file <fstream>:
+
+c
+Copy code
+#include <fstream>
+
+
+
+alessimichele00@yahoo.it
+come vado a capo con std::ofstream?
+In C++, you can insert a new line character in a file using std::ofstream by using the manipulator std::endl.
+
+Here is an example of using std::endl to write a new line to a file:
+
+c
+Copy code
+std::ofstream file;
+file.open("output.txt");
+file << "This is the first line." << std::endl;
+file << "This is the second line." << std::endl;
+file.close();
+In this example, two lines of text are written to a file named "output.txt". The std::endl manipulator is used to insert a new line character after each line of text, causing each line to be written on a separate line in the file.
+
+alessimichele00@yahoo.it
+void coeff::coeff_from_file(std::string filename){
+    std::ifstream filevar(filename);
+    if (filevar)
+    {
+        filevar >> a>> b>> c;
+    } 
+}
+This code is a member function of the coeff class, called coeff_from_file. It takes as an argument a std::string named filename, which represents the name of the file from which the coefficients of a polynomial equation will be read.
+
+The function starts by creating an instance of std::ifstream named filevar and initializing it with the filename argument. The ifstream constructor opens the file specified by filename for reading.
+
+Next, an if statement checks whether the file has been successfully opened by checking the truthiness of filevar. If the file has been successfully opened, the values of the coefficients a, b, and c are read from the file using the >> operator.
+
+Note: This code assumes that the file contains exactly three values, separated by whitespace, that represent the coefficients of the polynomial equation. If the file contains more or less values, or if the values are not separated by whitespace, this code may produce unexpected results.
+
+
+
+alessimichele00@yahoo.it
+difference between ifstream and ofstream
+std::ifstream and std::ofstream are two standard library classes in C++ for input/output operations with files.
+
+std::ifstream (input file stream) is used for reading data from a file. It is typically used to open a file for input and read data from the file into memory.
+
+std::ofstream (output file stream) is used for writing data to a file. It is typically used to open a file for output and write data to the file.
+
+In general, std::ifstream is used to read data from a file, while std::ofstream is used to write data to a file. Both classes provide similar functionality, but std::ifstream is optimized for reading data, while std::ofstream is optimized for writing data.
