@@ -9,6 +9,7 @@ int main(){
     p = &v[0];
     q = v;
     r = &w[0];
+    std::cout<<*p<<std::endl;
     std::cout<<p<<std::endl;
     std::cout<<q<<std::endl;
     std::cout<<r<<std::endl;
