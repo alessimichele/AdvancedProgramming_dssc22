@@ -19,6 +19,7 @@ To allocate the memory on a "heap", use `new`, to free it, use `delete` or `dele
 NB new alloca nell heap, esattamente come fa il mallock in C.
 ```
 int* p1 =new int; // cosi facendo il puntatore, come variabile (che al suo interno ha un indirizzo di memoria), è salvato dentro lo stack, ma l'indirizzo di memoria a cui sta puntando è nella heap.
+// "give me enough space for one integer on the heap"
 int* p =new int[N];
 for(int i=0;i<N;i++){
     p[i]=i;
