@@ -1,0 +1,6 @@
+The Rule of 0-3-5 is a guideline in C++ that outlines the responsibilities of a class regarding resource management. The rule states that a class should:
+
+0: Have no custom destructor, copy constructor, or copy assignment operator if it can be avoided.
+3: Have a custom destructor, copy constructor, or copy assignment operator if it is needed to manage dynamically allocated resources.
+5: Have custom destructors, copy constructors, copy assignment operators, move constructors, and move assignment operators if they are needed to manage dynamically allocated resources.
+The idea behind the Rule of 0-3-5 is to minimize the amount of manual resource management required in a class and to ensure that classes are easy to use and maintain. In general, if a class does not manage any dynamically allocated resources, it

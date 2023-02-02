@@ -1,0 +1,23 @@
+In C++, you can call the copy constructor and move constructor explicitly or implicitly.
+
+Explicitly calling the copy constructor:
+
+scss
+Copy code
+MyClass<T> obj1(10);
+MyClass<T> obj2(obj1);
+Explicitly calling the move constructor:
+
+scss
+Copy code
+MyClass<T> obj1(10);
+MyClass<T> obj2(std::move(obj1));
+Implicit calls to the copy constructor occur when:
+
+An object is passed by value to a function.
+An object is returned by value from a function.
+An object is initialized with another object of the same type.
+Implicit calls to the move constructor occur when:
+
+An object is passed or returned by value with std::move.
+Note: The move constructor is only called if the class has a move constructor defined, otherwise the copy constructor will be used.
