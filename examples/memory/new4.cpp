@@ -10,6 +10,18 @@ public:
     void print();
     CMyClass& operator=(const CMyClass& p);
     CMyClass operator+(const CMyClass& p);
+
+    // copy constructor: it takes the variable of your class and makes a copy of that
+    // it is called when I pass something by value to a function.
+    // if i don t build this copy constructor, when i pass a class to a function by value, the compiler
+    // creates a dummy copy of the class, not a deep copy and so it crashes (problem always with deconstructor)
+
+// ONCE WE NEED DECONSTRUCTOR, WE ALSO NEED ASSIGNEMENT = OPERATOR AND COPY CONSTRUCTOR
+// AND WE NEED DECONSTRUCTOR EVERY TIME WE DEAL WITH DYNAMIC DATA MEMBER IN OUR CLASS 
+
+    // how to call it?
+    // myclass obj;
+    // myclass obj2(obj); initialize the second object to be the same as the first obj
     CMyClass(const CMyClass& p);
     
 };

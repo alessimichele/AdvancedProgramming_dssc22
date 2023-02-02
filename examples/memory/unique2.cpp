@@ -22,7 +22,7 @@ template<typename T>
     data=std::make_unique<int[]>(N);
     size=N;
     for(int i=0;i<N;i++){
-        data[i]=i;
+        data[i]=i; // then use as normal pointer
     }
     std::cout<<"constructor called"<<std::endl;
 }
@@ -37,7 +37,7 @@ void CMyClass<T>::print() {
     std::cout<<std::endl;   
 }
 
-
+// with normal pointer it was: delete(free) and reallocate. Now we dont have to delete anymore
 template <typename T>
 CMyClass<T>& CMyClass<T>::operator=(const CMyClass<T>& p){
     std::cout<<"assignment operator called"<<std::endl;
@@ -45,7 +45,7 @@ CMyClass<T>& CMyClass<T>::operator=(const CMyClass<T>& p){
 if (this != &p) { 
 //copy non-dynamic variables
 	size=p.size;
-    data.reset(new T[size]);
+    data.reset(new T[size]); // will both delete and reallocate with size I want
     for(int i=0;i<size;i++){
         data[i]=p.data[i];
     }

@@ -1,6 +1,9 @@
 #include <iostream>
 #include <memory>
 
+// no more destructor!!! Once outside the scope, the delete itself.
+
+// use: std::vector; if cannot, use unique pointer; if not, use row pointer (standard)
 
 void function(int* p){
     std::cout<<p<<std::endl;

@@ -9,10 +9,11 @@ public:
     ~CMyClass();
     void print();
     CMyClass& operator=(const CMyClass& p);
-    CMyClass& operator=(CMyClass&& p);
+    CMyClass& operator=(CMyClass&& p); // 
     CMyClass operator+(const CMyClass& p);
     CMyClass(const CMyClass& p);
-    CMyClass(CMyClass&& p);
+    CMyClass(CMyClass&& p); // move copy constructr
+    // nb: when calling move copy constructor to an object, the original object get destroyed
     
 };
 
@@ -170,3 +171,34 @@ int main(){
 }
  
  
+/*
+In C++, a move constructor is a special constructor that takes a rvalue reference as its argument. The purpose of a move constructor is to transfer ownership of the resources of an rvalue object to the newly created object.
+
+The move constructor is usually defined as a special case of the copy constructor. It allows you to create a new object by "stealing" the resources of an existing rvalue object, rather than copying the values of its member variables.
+
+Here is an example of a class with a move constructor:
+
+cpp
+Copy code
+class MyClass {
+ public:
+  int* data;
+  int size;
+
+  MyClass(const int& N) {
+    size = N;
+    data = new int[N];
+  }
+
+  MyClass(MyClass&& other) {
+    size = other.size;
+    data = other.data;
+    other.data = nullptr;
+    other.size = 0;
+  }
+
+  ~MyClass() {
+    delete[] data;
+  }
+};
+In this example, the move constructor takes a rvalue reference to an object of type MyClass and transfers ownership of the data and size member variables to the newly created object. The original object is left in a valid but unspecified state, with its data pointer set to nullptr and its size member variable set to 0.*/
