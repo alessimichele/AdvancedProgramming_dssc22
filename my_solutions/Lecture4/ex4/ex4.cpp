@@ -9,8 +9,11 @@ class matrix{
 public:
     std::vector<T> data;
     
-    // default constructor
-    matrix(){};
+    // default constructor: initialize 1x1 matrix
+    matrix(){
+        size = 1;
+        data.resize(1);
+    };
 
     // parameters constructor
     matrix(int n){
@@ -20,7 +23,7 @@ public:
 
     void read_from_file(std::string filename);
     
-    matrix operator*(const matrix& B);
+    matrix<T> operator*(const matrix<T>& B);
 
     void write_on_file(std::string filename);
 
@@ -32,7 +35,7 @@ void matrix<T>::read_from_file(std::string filename){
     std::ifstream filevar(filename);
     filevar>>size;
     int number=size*size;
-    data.resize(number);
+    data.resize(number); // gli alloco la memoria necessaria
     for (int i = 0; i < number; i++)
     {
         filevar>>data[i];
