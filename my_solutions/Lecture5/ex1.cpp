@@ -27,8 +27,14 @@ public:
     // copy constructor
     Matrix(const Matrix<T>& p);
 
+    // move constructor
+    Matrix( Matrix<T>&& p);
+
     // assignement operator
     Matrix<T> operator=(const Matrix<T>& p);
+
+    // move assignement operator
+    Matrix<T> operator=( Matrix<T>&& p);
 
     // overload *
     Matrix<T> operator*(const Matrix<T>& B);
@@ -54,10 +60,10 @@ template <typename T>
     Matrix<T>::Matrix(const int n){
         size = n;
         data = nullptr;
+        std::cout<<"constructor called on: "<<data<<std::endl;
         if (n > 0){
             data = new T[n*n];
-        }
-        std::cout<<"constructor called on: "<<data<<std::endl;
+        };
     }
 
 // destructor
@@ -87,6 +93,18 @@ template <typename T>
         }
     }
 
+// move constructor
+template <typename T>
+    Matrix<T>::Matrix( Matrix<T>&& p){
+        std::cout<<"move constructor called "<<std::endl;
+        if (this != &p){
+            size = p.size;
+            p.size = 0;
+            data = p.data;
+            p.data = nullptr;
+        }
+    }
+
 // assignement operator
 template <typename T>
     Matrix<T> Matrix<T>::operator=(const Matrix<T>& p){
@@ -104,6 +122,22 @@ template <typename T>
             if ( data != nullptr) {delete[] data;}
                 data = nullptr;
         }
+    }
+    return *this;
+    }
+
+// move assignement operator
+template <typename T>
+    Matrix<T> Matrix<T>::operator=( Matrix<T>&& p){
+    std::cout<<"move asignement operator called on"<<data<<std::endl;
+    if (this != &p){
+        size = p.size;
+        p.size = 0;
+        if (data != nullptr){
+            delete[] data;
+        }
+        data = p.data;
+        p.data = nullptr;
     }
     return *this;
     }
@@ -176,7 +210,40 @@ template <typename T>
         }
     }
 
+int main(){
+    Matrix<double> A,B;
+    A.read_from_file("A.txt");
+    B.read_from_file("B.txt");
 
+    auto C = A*B;
+    C.write_on_file("C.txt");
+    C.print();
+
+    // assignement operator
+    C=A; // call assignement operator
+    C.write_on_file("A_copy1.txt"); // should be the same of A.txt
+    
+    // copy constructor
+    Matrix<double> D(A); // call copy constructor
+    D.write_on_file("A_copy2.txt"); // shoul be the same of A.txt
+    
+    // move assignement operator
+    C=std::move(A); // call move assignement operator
+    C.write_on_file("A_copy3.txt"); // shoul be the same of A.txt
+    A.write_on_file("A_test.txt"); // has zero there, as we have destroyed A
+    
+    // move copy constructor
+    Matrix<double> E(std::move(B)); // call move copy constructor
+    E.write_on_file("E.txt"); // shoul be the same of B.txt
+    B.write_on_file("B_test.txt"); // has zero there, as we have destroyed B
+    return 0;
+
+}
+
+
+
+/*
+main di prova
 int main(){
     // Matrix A
     Matrix<int> A(2);
@@ -188,7 +255,7 @@ int main(){
         A.data[i] = i;
     }
     A.print();
-    
+    A.write_on_file("A.txt");
     // Matrix B
     Matrix<int> B(2);
     // fill Matrix B with 1,0,0,1
@@ -199,6 +266,9 @@ int main(){
     B.print();
     auto C = A*B;
     C.print();
+    Matrix<int> Z;
+    Z=A;
+    Z.print();
 
     
     Matrix<double> D,E;
@@ -213,6 +283,14 @@ int main(){
     Matrix<double> F = D*E;
     F.write_on_file("result.txt");
     F.print();
-    return 0;
 
+    std::cout<<"Experiments with move/copy constructor"<<std::endl;
+    A.print();
+    Matrix<int> A_1(A); // copy constructor
+    A_1.write_on_file("A_1.txt");
+    C=A; // assignement operator
+    C.write_on_file("A_copy.txt"); 
+    return 0;
 }
+*/
+
