@@ -234,6 +234,7 @@ int main(){
     
     // move copy constructor
     Matrix<double> E(std::move(B)); // call move copy constructor
+    // Matrix<double> E=std::move(B); // same as line above?
     E.write_on_file("E.txt"); // shoul be the same of B.txt
     B.write_on_file("B_test.txt"); // has zero there, as we have destroyed B
     return 0;
