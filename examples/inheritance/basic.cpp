@@ -1,6 +1,9 @@
  #include <iostream>
 //the most basic example
  
+// protected make sense in the context of inheritance. Smth protected, your child class can access it
+// but outside the class you cannot access any class variable/member function.
+
 //base ("parent") class 
 class Polygon {
   protected:

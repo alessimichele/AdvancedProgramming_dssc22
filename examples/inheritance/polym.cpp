@@ -31,6 +31,12 @@ int main () {
   Rectangle rect;
   Triangle trgl;
   Polygon poly;
+  // la sintassi è tipo:
+  // double a = 1;
+  // int* p = &a; it complains because a is double but double IS NOT child of int
+
+  // here we say:
+  // "type Polygon" * (pointer) ppoly (name of the pointer) = &rect (ppoly points to an object of a child class)
   Polygon * ppoly1 = &rect;
   Polygon * ppoly2 = &trgl;
   Polygon * ppoly3 = &poly;

@@ -11,7 +11,7 @@
 
 
 
-<title>Lecture_notes5</title>
+<title>Lecture_notes7</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -352,231 +352,207 @@ display: none;
 </div>
 
 
-<p><em>The notes do not consitute a full reference book, please attend
-lectures, watch videos or read something else to fully understand the
-material. They are nothing more than “notes”.</em></p>
-<div id="memory-management" class="section level3">
-<h3>Memory management</h3>
-<div id="c-like-style-memory-management" class="section level4">
-<h4>C-like style memory management</h4>
-<p>Memoria: divisa in due… stack(piccola e veloce) e heap (più grande e
-più lenta). Stack: small specific memory area available to our
-program</p>
-<p>The memory that I don’t manually allocate (es int a=2) va nello
-stack</p>
-<p>Se voglio roba più grande, array ad es, devo dire al programma di
-mettere questo oggetto in un altra parte (nell heap)… in questo contesto
-uso delle funzioni che sono i memory allocator</p>
-<p>Using the pointer I can allocate memory (in C malloc, calloc and free
-to de allocate) ### So far we have only seen pointers in a context of
-pointing to an existing variable or passing something to a function. It
-has been mentioned that c-style arrays are actually pointers, but
-without going into details.</p>
-<p>The memory your program uses is divided into a “heap” and a “stack”.
-Stack is small (and thus fast), heap is as big as your operative memory
-allows. To allocate the memory on a “heap”, use <code>new</code>, to
-free it, use <code>delete</code> or <code>delete[]</code>: NB new alloca
-nell heap, esattamente come fa il mallock in C.</p>
-<pre><code>int* p1 =new int; // cosi facendo il puntatore, come variabile (che al suo interno ha un indirizzo di memoria), è salvato dentro lo stack, ma l&#39;indirizzo di memoria a cui sta puntando è nella heap.
-// &quot;give me enough space for one integer on the heap&quot;
-int* p =new int[N];
-for(int i=0;i&lt;N;i++){
-    p[i]=i;
-}
-delepe p1;
-delete[] p;</code></pre>
-<p>If you are only allocating one object and not an array, use
-<code>delete</code> without brackets:</p>
-<p>NB se non faccio il delete, la memoria resta occupata… il programma
-chide al sistema operativo di dargli sempre nuova memoria… MEMORY
-LEAK-&gt; WHEN ALLOCATE MEMORY BUT NOT DEALLOCATE</p>
-<p>valgrind –leak-check=full ./a.out</p>
-<p>per vedere se ho fatto dei memory leak… ancora meglio se compilando
-metto g++ -g -o … il -g mi da info di debug</p>
-<pre><code>int* p =new int;
-...
-
-delete p; 
-</code></pre>
-<p>The “problems” start when we have the allocation happen inside the
-classes:</p>
-<p>At the very least, we now have a constructor and destructor
-obligatory:</p>
-<pre><code>template &lt;typename T&gt;
-class MyClass{
+<div id="various-topics-passing-arguments-to-a-program" class="section level3">
+<h3>Various Topics: passing arguments to a program</h3>
+<p>So far we have never formaly seen how to pass command line parameters
+to your program. The full <code>int main</code> signature actually
+should be</p>
+<pre><code>int main( int argc, char *argv[] ){}</code></pre>
+<p>Here <code>argc</code> is the number of the arguments passed to the
+program and <code>argv</code> is an array of “c-strings” that keeps the
+passed values. The name of the program is always passed as the first
+argument, so <code>argc</code> is never <code>0</code>.</p>
+<p>It’s typical to put some “usage” error message in case the user
+forgets the needed arguments:</p>
+<pre><code> if (argc&lt;2){
+     std::cout&lt;&lt;&quot;USAGE: &quot;&lt;&lt;argv[0]&lt;&lt;&quot; SOME NUMBERS&quot;&lt;&lt;std::endl;    
+  }</code></pre>
+<p>To pass options like you often see of the type “-n 2”, see
+<code>params2.cpp</code> for the example</p>
+</div>
+<div id="various-topics-timing" class="section level3">
+<h3>Various Topics: timing</h3>
+<p>You can use the <code>std::chrono</code> from the header
+<code>chrono</code>. The old c-style timing from
+<code>&lt;ctime&gt;</code> header also works, but is less accurate and
+less flexible for uses with modern interfaces, so we will not discuss
+any examples from it. To start the timings, do:</p>
+<pre><code>  std::chrono::time_point&lt;std::chrono::steady_clock&gt; t_start;
+  t_start = std::chrono::steady_clock::now();//we could just use auto</code></pre>
+<p>To end:</p>
+<pre><code>auto t_end = std::chrono::steady_clock::now();
+auto total = std::chrono::duration_cast&lt;std::chrono::microseconds&gt;(t_end - t_start).count();</code></pre>
+<p>There are other clocks in <code>chrono</code>, for example
+<code>system_clock</code> and <code>high_resolution_clock</code>, but
+the first one depends on your laptop time and might give surprises if it
+changes during the execution (for example, corrected from time server)
+and the second one is implementation-dependent, so you never know what
+it really is.</p>
+<p>Since we want to write c++, let’s introduce the concept of “scoped
+timer” - the timer that calls it’s desctructor when going out of scope
+and saves you from typing the time difference manually every time. The
+simplest example is in the file <code>simple_timer.cpp</code></p>
+<pre><code>class CSimple_Timer{
+  std::chrono::time_point&lt;std::chrono::steady_clock&gt; t_start;
+  std::string time_what;
+  void print_time(){
+    auto t_end = std::chrono::steady_clock::now();
+    auto total = std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t_end - t_start).count();
+    std::cout&lt;&lt;time_what&lt;&lt;&quot; took &quot; &lt;&lt;total&lt;&lt; &quot; milliseconds&quot;&lt;&lt;std::endl;
+  }
 public:
-    T* data;
-    MyClass(const int&amp; N);
-    ~MyClass();
-};
-
-template&lt;typename T&gt; 
-    MyClass&lt;T&gt;::MyClass(const int&amp; N) {
-    data=new T[N];
-    for(int i=0;i&lt;N;i++){
-        data[i]=i;
-    }
-}
-
-template&lt;typename T&gt; 
-    MyClass&lt;T&gt;::~MyClass() {
-    delete[] data;
-    data=nullptr;
-}
-</code></pre>
-<p>This might be enough as a “minimal survival”, but what happens if you
-do</p>
-<pre><code>MyClass A(10),B(10);
-A=B;</code></pre>
-<p>?</p>
-<p>It will crash. The compiler doesn’t know how to make a “deep copy”,
-you need to tell it: (senza questo codice, ho due istanze diverse della
-stessa classe ma con lo stesso puntatore)</p>
-<pre><code>template &lt;typename T&gt;
-CMyClass&lt;T&gt;&amp; CMyClass&lt;T&gt;::operator=(const CMyClass&lt;T&gt;&amp; p){
-//first check for self-assignment
-if (this != &amp;p) { 
-//copy non-dynamic variables
-    size=p.size;
-//free memory of existing dynamic variables
-    if (data != nullptr){
-        delete[] data;
-        data=nullptr;
-    }   
-//create and copy dynamic variables
-    if(p.data==nullptr){data=nullptr;}
-    else{
-        data = new T[size];
-        for(int i=0;i&lt;size;i++){
-            data[i]=p.data[i];
-        };
-    }//else 
-}//of cheking for self-assignement
-return *this;
-};
-</code></pre>
-<p>Destructor is obbligatory function in each class which has dynmaic
-memory. I need to free the memory. Io il destructor devo solo averlo
-definito…. non devo chiamarlo… lui si “chiama da solo” prima che lo
-scope muoia… quindi se uso una classe dentro uno scope {}… prima dela }
-di chiusura il deconstructor si chiama da solo.</p>
-<p>NB: VECTOR: with std::vector i don t have to do this stuff… is in
-pratica a class che da sola chiama new e poi de alloca con delete… ma io
-non vedo nulla…. faccio tipo in python senza pensare. Ma se lavoro con
-codice che va con C o ho restrizione etc… magari devo fare tutto io e
-quindi non posso usare vector</p>
-<p>Note, that if you overload <code>+</code> operator, and then call
-<code>C=A+B</code>, the <code>=</code> will actually never get called
-due to the process called <a href="https://en.cppreference.com/w/cpp/language/copy_elision">“copy
-elision”</a>.</p>
-<p>What happens if you now try to pass the object of your class to a
-function by value? Another crash, because we are missing a “copy
-constructor”. A general rule is that, if you are having pointers in your
-class and need a destructor, you also need to overload assignment
-operator and the copy constructor. If you are sure that you will never
-use them, make them <code>delete</code>, otherwise you or someone else
-later might try to do unexpected things with your class and get a
-strange crash instead of a clear error message. So, do
-<code>CMyClass&amp; operator=(const CMyClass&amp; p) = delete;</code></p>
-<p>Here is how you create a copy constructor:</p>
-<pre><code>template&lt;typename T&gt; 
-CMyClass&lt;T&gt;::CMyClass ( const CMyClass&lt;T&gt;&amp; p ) {
-//first check for self-assignment
-if (this != &amp;p) {
-//copy non-dynamic variables
-    size=p.size;
-//create and copy dynamic variables
-    if(p.data==nullptr){data=nullptr;}
-    else{
-        data = new T[size];
-        for(int i=0;i&lt;size;i++){
-            data[i]=p.data[i];
-        };
-    }//else
-    
-}//of cheking for self-assignement
-    
-}//copy constructor</code></pre>
-<p>This is not the end of the story. Sometimes you mihgt want to “move”
-your object instead of copying it (for example, if the object was
-temporary). There is <code>std::move</code> that does that for standard
-objects and can also do that for you if you create a <em>move
-constructor</em> and <em>move assignment operator</em></p>
-<pre><code>template&lt;typename T&gt; 
-CMyClass&lt;T&gt;::CMyClass ( CMyClass&lt;T&gt; &amp;&amp; p ) {
-//first check for self-assignment
-if (this != &amp;p) {
-//copy non-dynamic variables
-    size=p.size;
-    p.size=0;
-//create and copy dynamic variables
-    data=p.data;
-    p.data=nullptr;
-}//of checking for self-assignment
-    
-}</code></pre>
-<p>Now if you do</p>
-<pre><code>auto obj5=std::move(obj3); </code></pre>
-<p>move constructor will be called. Notice, how the above case doesn’t
-call an assignment operator. However,</p>
-<pre><code> obj5=std::move(obj2);</code></pre>
-<p>does.</p>
+  CSimple_Timer(std::string s):
+                     t_start{std::chrono::steady_clock::now()},
+                     time_what{s} {}
+  ~CSimple_Timer() { print_time();}
+};</code></pre>
+<p>Here in the desctructor we print the time of what was executed while
+the timer object existed. This is also a nice example of a destrucor
+that doesn’t just free memory, but actually does something else.</p>
+<p>However, this timer is still not “good enough” if we want to measure
+the same things repeatedly. We need something that could keep track of
+different timer calls and print the result summary at the end. The
+solution for this is included in the <code>timer.cpp</code> file.</p>
 </div>
-<div id="smart-pointers-unique-pointer" class="section level4">
-<h4>Smart Pointers: Unique Pointer</h4>
-<p>You can save yourself some typing if you use “smart pointers” from
-header <code>memory</code>. It is considered good practice to never use
-“raw pointers” if smart ones can be used.</p>
-<pre><code> std::unique_ptr&lt;int[]&gt; p(new int[5]);   </code></pre>
-<p>This object will call <code>delete[]</code> automatically when going
-out of scope, so you don’t have to worry about freeing the memory
-manually.</p>
-<p>The file <code>unique2.cpp</code> has the examples of how to use it
-inside a class.</p>
-<p>If you need to pass the pointer to a C-Style function, use p.get() to
-get the raw pointer. However, you need to trust the function to not try
-to deallocating the memory as that would crash your program.</p>
-</div>
-<div id="test-yourself" class="section level4">
-<h4>Test Yourself:</h4>
+<div id="strings-and-streams-more-notes-coming-soon-use-example-files-or-your-own-lecture-notes-for-now" class="section level3">
+<h3>Strings and streams (more notes coming soon, use example files or
+your own lecture notes for now)</h3>
+<p><em>c++ supports c-strings for compatibility, but you should avoid
+using them whenever there are alternatives.</em> C-strings are just
+<code>char</code> arrays with a <code>/0</code> character at the end.
+Functions to work with them are:</p>
 <ul>
-<li><p>how do you allocate a dynamic array in C++?</p></li>
-<li><p>use ‘new’.</p></li>
-<li><p>whats the difference between <code>delete</code> and
-<code>delete[]</code>?</p></li>
-<li><p>delete[] is used to free memory of an array, delete is used to
-free a single memory address</p></li>
-<li><p>when do you need to overload assignment operator for your
-class?</p></li>
-<li><p>when we deal with dynamic memory management, we need destructor,
-copy concstructor and assignement operator. it is used to copy values
-from one object to another already existing object. Need to use when i
-need to do a deep copy of an object, cioe quando ho un oggetto dinamico
-di una classe, e ci faccio una copia prendendo un altro puntatore che
-punta a un altra zona di memoria e copiando i valori del vecchio oggetto
-nel nuovo</p></li>
-<li><p>when do you need to create a copy constructor for your class?
-when i have to deal with pointers inside my class; more generally, when
-i pass by value objects of my class to a function.</p></li>
-<li><p>when do you need to create a move constructor for your
-class?</p></li>
-<li><p>when we want to “move” our object instead of copying it (for
-example, if the object was temporary).</p></li>
-<li><p>what should you do if your class allocates resources, but you are
-sure you will never need a copy constructor? mettere = delete alla fine
-del constructor.</p></li>
+<li>strcpy(s1, s2); // Copies string s2 into string s1.</li>
+<li>strcat(s1, s2); // Concatenates string s2 onto the end of string
+s1.</li>
+<li>strlen(s1); //Returns the length of string s1.</li>
+<li>strcmp(s1, s2); //Returns 0 if s1 and s2 are the same; less than 0
+if <code>s1&lt;s2</code>; greater than 0 if <code>s1&gt;s2</code>.</li>
+<li>strchr(s1, ch); // Returns a pointer to the first occurrence of
+character ch in string s1.</li>
+<li>strstr(s1, s2); //Returns a pointer to the first occurrence of
+string s2 in string s1.</li>
+</ul>
+<p>They are pretty uncomfortable to work with, so, use
+<code>std::string</code> from the header <code>string</code>.</p>
+</div>
+<div id="lambda-functions-and-some-stl-algorithms" class="section level3">
+<h3>Lambda functions (and some STL algorithms)</h3>
+<p>There is good <a href="https://books.google.it/books/about/C++_Lambda_Story.html?id=wqw2zgEACAAJ&amp;redir_esc=y">book</a>
+about lambdas if you want to know more than needed for “survival”.</p>
+<p><em>While there is nothing to stop you from always using lambda
+functions instead of “normal” ones (except it being harder to write/read
+the code), they are usually only used with STL algorithms.</em></p>
+<p>But to better understand what they do, we must start with “lambda
+functions in the wild”. Actually, sometimes they are called “lambda
+expressions” or just “lambdas”.</p>
+<p>The simplest lambda is just</p>
+<pre><code>[]{};</code></pre>
+<p>This defines a function that does nothing and can’t even be called
+later as it has no name.</p>
+<p>The general possible structure of a lambda function is</p>
+<pre><code>[CAPTURES](PARAMETERS)-&gt;RETURN_TYPE{WHAT THE FUNCTION DOES}();</code></pre>
+<p>You can “capture” existing variables.</p>
+<ul>
+<li>[] Empty capture list, nothing will be captured.</li>
+<li>[something] Capture <code>something</code> by copy.</li>
+<li>[&amp;something] Capture something by reference.</li>
+<li>[x, &amp;y] Capture y by-copy and y by-reference.</li>
+<li>[=] Capture anything named from the enclosing scope by-copy.</li>
+<li>[&amp;] Capture anything named from the enclosing scope
+by-reference.</li>
+<li>[&amp;, x, y] Capture anything named from the enclosing scope by
+reference, except x and y which are captured by-copy.</li>
+<li>[=, &amp;x] Capture anything named from the enclosing scope by copy,
+except x which must be captured by-reference</li>
+</ul>
+<p>Since we are using lambdas outside of STL, we probably need to give
+them names. The easiest way is let the compiler decide the type for you
+(it’s actually different for each function)</p>
+<pre><code>auto func = [](int i){ return i; };</code></pre>
+<p>The things captured by value are captured at the moment the lambda
+was created, not when it was called. Also, you can’t change them by
+default. To do that, you need a keyword <code>mutable</code></p>
+<pre><code>int a{0};
+auto very_useful_lambda = [a]() mutable {a=a+2;
+    std::cout &lt;&lt; a &lt;&lt; std::endl;
+};</code></pre>
+<p>Now let’s look at how to use them with algorithms:</p>
+<pre><code>int count{0};
+//unfortunately, you need an external variable for index
+std::generate(vec.begin(),vec.end(),[&amp;count]{count++;return count*count;});
+   
+//sort wants a function that accepts two parameters and compares them
+std::sort(vec.begin(),vec.end(),[](int x,int y){return x&gt;y;});
+  
+//for_each can be replaced by a range loop usually
+std::for_each(vec.begin(),vec.end(),[](int i){std::cout&lt;&lt;i&lt;&lt;std::endl;});
+
+
+std::transform(vec.begin(),vec.end(),vec2.begin(),[](int&amp; x){return x+2;});</code></pre>
+</div>
+<div id="test-yourself-more-questions-coming-soon" class="section level3">
+<h3>Test Yourself: (more questions coming soon)</h3>
+<ul>
+<li>what is this <code>[](){}()</code>?</li>
+<li>what’s the general structure of a lambda function?</li>
+<li>what does “mutable” keyword do in a lambda function?</li>
 </ul>
 </div>
+<div id="varios-topics-random-numbers" class="section level3">
+<h3>Varios topics: random numbers</h3>
+<p><a href="https://en.cppreference.com/w/cpp/numeric/random">here is a
+list of available distributions</a></p>
+<p>C fucntions <code>rand()</code> and <code>srand()</code> are also
+available, but are not recommended to use in c++ as they are way less
+random than the c++ provided distributions.</p>
+<p>here is the code to fill in a matrix from previous exercises with
+random numbers between 0 and 100:</p>
+<pre><code>template &lt;typename T&gt;
+void CMatrix&lt;T&gt;::random_fill(){
+    constexpr auto low_bound = 0;
+    constexpr auto up_bound = 100;
+   //take the current time as a random value for the seed
+    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine dre(seed);//engine
+    std::uniform_int_distribution&lt;int&gt; di(low_bound,up_bound);//distribution
+   //a lambda function to fill in the matrix
+    std::generate(data.begin(), data.end(), [&amp;](){ return di(dre);});//fill
+};</code></pre>
 </div>
-<div id="exercise1" class="section level3">
-<h3>Exercise1:</h3>
-<p>Rewrite your matrix multiplication exercise using raw pointers to
-store the data instead of vectors.</p>
+<div id="exercises" class="section level3">
+<h3>Exercises:</h3>
+<div id="exercise-1" class="section level4">
+<h4>Exercise 1:</h4>
+<p>Instead of reading the matrix from a file, get the matrix size from
+the command line parameters and use the <code>random_fill</code>
+function provided in the lecture to fill in a large matrix (around a
+1000). Add the timing to the matrix multiplication program (you can use
+the easier version of it, the one with <code>std::vector</code>).
+<em>Extra exercsise for those who managed to either install openblas or
+can find that module on some cluster:</em> add the call to the
+<code>cblas_dgemm</code> function like in the
+<code>matrix_cblas.cpp</code> example and compare the timings.</p>
 </div>
-<div id="exercise2" class="section level3">
-<h3>Exercise2:</h3>
-<p>Rewrite your matrix multiplication exercise using smart (unique)
-pointers to store the data instead of vectors.</p>
+<div id="exercise-2" class="section level4">
+<h4>Exercise 2:</h4>
+<p>Write your own “parameter parser” similar to <code>getops()</code>.
+Your code should accept parameters like.</p>
+<pre><code>./code -n1 1 -n2 2 -n3 3
+</code></pre>
+</div>
+<div id="exercise-3" class="section level4">
+<h4>Exercise 3:</h4>
+<p>“Play around” with examples of the lambda functions we saw, try to
+create a few simple lambda functions of your own to understand how they
+work.</p>
+</div>
+<div id="exercise-4" class="section level4">
+<h4>Exercise 4:</h4>
+<p>Time the <code>std::sort</code> with a lambda function and your own
+sort implementation (there was some in previous exercises) when sorting
+a large vector (large enough to take a few seconds).</p>
+</div>
 </div>
 
 

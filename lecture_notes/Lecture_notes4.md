@@ -218,13 +218,28 @@ When working with matrices, you generally want the data to be contiguous in memo
 ### Test Yourself:
  
  - what's the main advantage of using templates?
+ - isn't neccesary anymore to write different functions that do the same things for different type of data.
+ 
  - why do people usually put definitions of templated functions directly into `.hpp` files?
+ - because if we also use a src folder with their definition, since templated are instantiated at compilation time, we would instantiate also all possible type of data when declaring template.
+ 
  - except on types, what else can we template on?
+ - we can template on integer, that is all that is "mathematically" an integer, not just "int".
+ 
  - what is template specialization?
+ - when we specify the type of data we are going to use (tell the compiler which type I use). It  make the compiler produce very different functions based on the type
+ 
  - what is a variadic template?
+ - it is a type of template in which the number and the type of parameters of a function are templated, that is: variable number of templated parameters
+ 
  - why using `push_back` for `std::vector` is a bad idea?
+ - because if we havent enough space, the compiler will copy all the content of the vetor to store the value passed with push_back
+ 
  - how do you pass data from `std::vector` to a "C-style" function that needs a pointer?
+ - using &name_of_vector or name_of_vector.data()
+ 
  - why you shouldn't use a "vector of vectors"?
+ - because we want data to be contigous in memory
 
 
 #### All the code snippets below have mistakes, find them:
@@ -244,11 +259,33 @@ int main(){
  ...
 }
 ```
+Sol:
+```
+//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
+template <typename T>
+class CMyClass{
+  T a;
+  T b;
+}
+
+int main(){
+  CMyClass<T> var;
+ ...
+}
+```
 
 Snippet 2:
 ```
 //BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
 template <typename T, double S>
+void add_number(T& var){
+    T=T+S;
+}
+```
+Sol:
+```
+//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
+template <typename T, int S> // qualcosa che sia "int" matematicamente
 void add_number(T& var){
     T=T+S;
 }
@@ -260,6 +297,19 @@ Snippet 3:
 //BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
 template <typename... Types>
 void myPrint(const Types&... args){
+    std::cout<<arg<<" ";
+    myPrint(args...);
+}
+```
+Sol:
+```
+template <typename T>
+void myPrint(const T& arg){
+  std::cout<<arg<<" ";
+}
+
+template <typename T, typename... Types>
+void myPrint(const T& arg, const Types&... args){
     std::cout<<arg<<" ";
     myPrint(args...);
 }
@@ -282,6 +332,25 @@ struct MyClass{
 int main(){
  MyClass var;
  print(var);
+}
+
+```
+Sol:
+```
+//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
+template <typename T>
+void print(const T& var){
+  std::cout<<var<<std::end;
+}
+
+struct MyClass{
+  int a;
+  int b;
+}
+
+int main(){
+ MyClass var;
+ print<int>(var);
 }
 
 ```

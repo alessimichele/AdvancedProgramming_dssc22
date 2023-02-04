@@ -584,17 +584,34 @@ elements as <code>data[i*N+j]</code>.</p>
 <div id="test-yourself" class="section level3">
 <h3>Test Yourself:</h3>
 <ul>
-<li>what’s the main advantage of using templates?</li>
-<li>why do people usually put definitions of templated functions
-directly into <code>.hpp</code> files?</li>
-<li>except on types, what else can we template on?</li>
-<li>what is template specialization?</li>
-<li>what is a variadic template?</li>
-<li>why using <code>push_back</code> for <code>std::vector</code> is a
-bad idea?</li>
-<li>how do you pass data from <code>std::vector</code> to a “C-style”
-function that needs a pointer?</li>
-<li>why you shouldn’t use a “vector of vectors”?</li>
+<li><p>what’s the main advantage of using templates?</p></li>
+<li><p>isn’t neccesary anymore to write different functions that do the
+same things for different type of data.</p></li>
+<li><p>why do people usually put definitions of templated functions
+directly into <code>.hpp</code> files?</p></li>
+<li><p>because if we also use a src folder with their definition, since
+templated are instantiated at compilation time, we would instantiate
+also all possible type of data when declaring template.</p></li>
+<li><p>except on types, what else can we template on?</p></li>
+<li><p>we can template on integer, that is all that is “mathematically”
+an integer, not just “int”.</p></li>
+<li><p>what is template specialization?</p></li>
+<li><p>when we specify the type of data we are going to use (tell the
+compiler which type I use). It make the compiler produce very different
+functions based on the type</p></li>
+<li><p>what is a variadic template?</p></li>
+<li><p>it is a type of template in which the number and the type of
+parameters of a function are templated, that is: variable number of
+templated parameters</p></li>
+<li><p>why using <code>push_back</code> for <code>std::vector</code> is
+a bad idea?</p></li>
+<li><p>because if we havent enough space, the compiler will copy all the
+content of the vetor to store the value passed with push_back</p></li>
+<li><p>how do you pass data from <code>std::vector</code> to a “C-style”
+function that needs a pointer?</p></li>
+<li><p>using &amp;name_of_vector or name_of_vector.data()</p></li>
+<li><p>why you shouldn’t use a “vector of vectors”?</p></li>
+<li><p>because we want data to be contigous in memory</p></li>
 </ul>
 <div id="all-the-code-snippets-below-have-mistakes-find-them" class="section level4">
 <h4>All the code snippets below have mistakes, find them:</h4>
@@ -610,9 +627,27 @@ int main(){
   CMyClass var;
  ...
 }</code></pre>
+<p>Sol:</p>
+<pre><code>//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
+template &lt;typename T&gt;
+class CMyClass{
+  T a;
+  T b;
+}
+
+int main(){
+  CMyClass&lt;T&gt; var;
+ ...
+}</code></pre>
 <p>Snippet 2:</p>
 <pre><code>//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
 template &lt;typename T, double S&gt;
+void add_number(T&amp; var){
+    T=T+S;
+}</code></pre>
+<p>Sol:</p>
+<pre><code>//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
+template &lt;typename T, int S&gt; // qualcosa che sia &quot;int&quot; matematicamente
 void add_number(T&amp; var){
     T=T+S;
 }</code></pre>
@@ -620,6 +655,17 @@ void add_number(T&amp; var){
 <pre><code>//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
 template &lt;typename... Types&gt;
 void myPrint(const Types&amp;... args){
+    std::cout&lt;&lt;arg&lt;&lt;&quot; &quot;;
+    myPrint(args...);
+}</code></pre>
+<p>Sol:</p>
+<pre><code>template &lt;typename T&gt;
+void myPrint(const T&amp; arg){
+  std::cout&lt;&lt;arg&lt;&lt;&quot; &quot;;
+}
+
+template &lt;typename T, typename... Types&gt;
+void myPrint(const T&amp; arg, const Types&amp;... args){
     std::cout&lt;&lt;arg&lt;&lt;&quot; &quot;;
     myPrint(args...);
 }</code></pre>
@@ -638,6 +684,23 @@ struct MyClass{
 int main(){
  MyClass var;
  print(var);
+}
+</code></pre>
+<p>Sol:</p>
+<pre><code>//BAD CODE AHEAD, DO NOT COPY BY ACCIDENT!
+template &lt;typename T&gt;
+void print(const T&amp; var){
+  std::cout&lt;&lt;var&lt;&lt;std::end;
+}
+
+struct MyClass{
+  int a;
+  int b;
+}
+
+int main(){
+ MyClass var;
+ print&lt;int&gt;(var);
 }
 </code></pre>
 </div>

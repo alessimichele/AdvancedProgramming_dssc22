@@ -196,13 +196,20 @@ If you need to pass the pointer to a C-Style function, use p.get() to get the ra
 #### Test Yourself:
 
  - how do you allocate a dynamic array in C++?
- use 'new'.
+ - use 'new'.
+ 
  - whats the difference between `delete` and `delete[]`?
+ - delete[] is used to free memory of an array, delete is used to free a single memory address
+ 
  - when do you need to overload assignment operator for your class?
- it is used to copy values from one object to another already existing object. Need to use when i need to do a deep copy of an object, cioe quando ho un oggetto dinamico di una classe, e ci faccio una copia prendendo un altro puntatore che punta a un altra zona di memoria e copiando i valori del vecchio oggetto nel nuovo
+ - when we deal with dynamic memory management, we need destructor, copy concstructor and assignement operator. it is used to copy values from one object to another already existing object. Need to use when i need to do a deep copy of an object, cioe quando ho un oggetto dinamico di una classe, e ci faccio una copia prendendo un altro puntatore che punta a un altra zona di memoria e copiando i valori del vecchio oggetto nel nuovo
+ 
  - when do you need to create a copy constructor for your class?
- when i have to deal with pointers inside my class
+ when i have to deal with pointers inside my class; more generally, when i pass by value objects of my class to a function.
+ 
  - when do you need to create a move constructor for your class?
+ - when we want to “move” our object instead of copying it (for example, if the object was temporary). 
+ 
  - what should you do if your class allocates resources, but you are sure you will never need a copy constructor?
  mettere = delete alla fine del constructor.
 
