@@ -4,6 +4,7 @@
 #include <cmath>
 #include <thread> //the easiest platform-independent way to make your program sleep
 
+// c++-style timer
 
 class CSimple_Timer{
   std::chrono::time_point<std::chrono::steady_clock> t_start;

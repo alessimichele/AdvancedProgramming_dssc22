@@ -3,6 +3,7 @@
 
 int main () {
 
+   // more flexible object (non devo avere degli array che contengono caratteri)
    std::string str1 = "Hello";
    std::string str2 = "World";
    std::string str3;
