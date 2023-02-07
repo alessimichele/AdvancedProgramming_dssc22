@@ -22,11 +22,13 @@ int main(){
     vec2.resize(10,0);
     int count{0};
    
+    /*
     //this all are valid expressions that do nothing
-    [](){};
-    []{}();
+    [](){}; // has no main, does nothing. Havent been called
+    []{}(); // does nothing but has been called (to do nothing). It has not parameter
+    [](){}(); // does nothing but has been called (to do nothing)   
     []{};
-    
+    */
     
     //actually, every lambda has it's own type, but you don't have to worry about that with auto
     auto addition = [](int x, int y)->double { return x + y; };
@@ -44,7 +46,15 @@ int main(){
     auto print_b = [b]{std::cout<<b<<std::endl;};
     b=1; 
     //this will ignore the b change and still keep the zero
+    // this is beacuase i passed b by value (not by ref), and at the line print_b was defined,
+    // b was 0. So it doesn t matter that at the next line I've changed b; the lambda fun cannot see
     print_b();
+
+     //capture by value by ref (this should work)
+    int c=0;
+    auto print_c_ref = [&c]{std::cout<<c<<std::endl;};
+    c=1; 
+    print_c_ref();
    
     auto very_useful_lambda = [a]() mutable {a=a+2;
         std::cout << "local a is: "<< a << std::endl;
