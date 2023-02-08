@@ -16,14 +16,16 @@ int main( int argc, char *argv[] ){
         std::cout<<"USAGE: "<<argv[0]<<" SOME NUMBERS"<<std::endl;
         
     }
-    
+    // nota: se non specifico cosa deve essere argc, di default sarà uguale al numero di paramerti che inserisco
+    std::cout<<argc<<std::endl;
+
     for (int i=0;i<argc;i++){
-        std::cout<<argv[i]<<" "; 
+        std::cout<<"You insert: "<<argv[i]<<" "; 
     }
     std::cout<<std::endl;
     
-    //note that the parameters passed like this are c-strings, so you might need to convert them to something else
-    // atoi: transform the string-style parameter nto integer init
+    // note that the parameters passed like this are c-strings, so you might need to convert them to something else
+    // atoi: transform the string-style parameter into integer (int)
     // atof: transofrm the string-style parameter into float (double)
     int a =atoi(argv[1]);
     double b = atof(argv[1]);
