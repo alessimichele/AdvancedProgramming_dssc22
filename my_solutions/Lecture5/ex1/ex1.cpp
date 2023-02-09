@@ -28,7 +28,7 @@ public:
     Matrix(const Matrix<T>& p);
 
     // move constructor
-    Matrix( Matrix<T>&& p);
+    Matrix(Matrix<T>&& p);
 
     // assignement operator
     Matrix<T> operator=(const Matrix<T>& p);
