@@ -1,13 +1,16 @@
 #include "mesh.hpp"
+#include "jacobi.hpp"
 
 int main(){
-    int N=9;
-    Mesh<int> my_grid(N);
-    int len = my_grid.size();
-    for (int i = 0; i < len; i++)
+    int N=2;
+    Mesh<double> my_grid(N);
+    my_grid.print();
+    Solver<double> solver;
+    for (int i = 0; i < 100; i++)
     {
-        std::cout<<my_grid.grid[i]<<" ";
+        solver.solve(my_grid);
+        my_grid.print();
     }
+
     return 0;
-    
 }
