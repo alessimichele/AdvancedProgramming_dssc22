@@ -1,8 +1,9 @@
-from matplotlib import pyplot as plt
-import numpy as np 
-import matplotlib.animation as animation
 
-#run this file with `python3 game_life.py` from command line
+# VEROOOOOOOOOO
+
+from matplotlib import pyplot as plt
+import numpy as np
+
 def find_neigh(i,j,n,m):
     # i is row index in the grid
     # j is col index in the grid
@@ -55,22 +56,35 @@ def next_iteration(current_state):
     return next_state
 
 
-fig = plt.figure()
-images = []
-image =  np.random.choice([0, 1], size=(50, 50), p=[0.2, 0.8])
 
-def animate(i):
-    global image
-    image = next_iteration(image)
-    im = plt.imshow(image, animated=True)
-    images.append([im])
-
-anim = animation.FuncAnimation(fig, animate, frames=15, interval=500, repeat = False)
-
-anim.save('game_of_life.gif', writer='imagemagick', fps=2)
-
+images=[]
+def game_of_life(initial_state, number_of_it):
+    k=0
+    current = initial_state
+    plt.imshow(np.array([current[i, :] for i in range(current.shape[1])]))
+    while np.sum(current)!=0 and k<number_of_it:
+        current = next_iteration(current)
+        #print(current)
+        #curr_img = plot_grid(current)
+        plt.imshow(np.array([current[i, :] for i in range(current.shape[1])]))
+        k = k+1
 
 
+import matplotlib.animation as animation
 
+fig=plt.figure()
+#current = np.random.choice([0, 1], size=(10, 10), p=[0.5, 0.5])
+current = np.zeros((5,5), dtype= int)
+current[2,1] =1 
+current[2,2]=1
+current[2,3]= 1
+curr = np.array([current[i, :] for i in range(current.shape[1])])
+#you can put something depending on i here
+def animate(f): 
+    game_of_life(curr,f)
 
+     
+anim = animation.FuncAnimation(fig,animate,frames=10, interval=1000)
 
+# save the animation as an gif
+anim.save("game_of_life.gif") 
