@@ -28,7 +28,7 @@ fig = plt.figure()
 def animate(i):
     jacobi(N, i)
 
-anim = animation.FuncAnimation(fig,animate,frames=50, interval=100)
+anim = animation.FuncAnimation(fig,animate,frames=30, interval=100)
 
 # save the animation as an gif
 anim.save("./images/jacobi_{}.gif".format(time.time())) 
