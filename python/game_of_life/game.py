@@ -49,10 +49,8 @@ def next_iteration(current_state):
             else:
                 if count == 3:
                     next_state[i,j] = 1
+    
     return next_state
-
-
-
 
 def game_of_life(initial_state, number_of_it):
     k=0
@@ -65,22 +63,4 @@ def game_of_life(initial_state, number_of_it):
         plt.imshow(np.array([current[i, :] for i in range(current.shape[1])]))
         k = k+1
 
-
-import matplotlib.animation as animation
-
-fig=plt.figure()
-current = np.random.choice([0, 1], size=(10, 10), p=[0.5, 0.5])
-#current = np.zeros((5,5), dtype= int)
-#current[2,1] =1 
-#current[2,2]=1
-#current[2,3]= 1
-curr = np.array([current[i, :] for i in range(current.shape[1])])
-#you can put something depending on i here
-def animate(f): 
-    game_of_life(curr,f)
-
-     
-anim = animation.FuncAnimation(fig,animate,frames=10, interval=1000)
-
-# save the animation as an gif
-anim.save("game_of_life.gif") 
+        
