@@ -1,6 +1,3 @@
-
-# VEROOOOOOOOOO
-
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -52,12 +49,11 @@ def next_iteration(current_state):
             else:
                 if count == 3:
                     next_state[i,j] = 1
-    
     return next_state
 
 
 
-images=[]
+
 def game_of_life(initial_state, number_of_it):
     k=0
     current = initial_state
