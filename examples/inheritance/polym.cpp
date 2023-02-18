@@ -37,7 +37,7 @@ int main () {
 
   // here we say:
   // "type Polygon" * (pointer) ppoly (name of the pointer) = &rect (ppoly points to an object of a child class)
-  Polygon * ppoly1 = &rect;
+  Polygon * ppoly1 =  &rect;
   Polygon * ppoly2 = &trgl;
   Polygon * ppoly3 = &poly;
   ppoly1->set_values (4,5);
