@@ -1,6 +1,9 @@
 #include <iostream>
 #include <typeinfo>
 
+/*
+Template specialization allows you to provide specialized implementations of templates for specific types or sets of types, which can be useful in cases where the generic implementation is not suitable for certain types.*/
+
 template <typename T>
 class CMyClass{
 public:    

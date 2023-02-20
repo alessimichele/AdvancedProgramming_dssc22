@@ -36,7 +36,7 @@ public:
    ~CDerived1(){std::cout<<"derived dctor called"<<std::endl;}
    void test_function(){
        std::cout<<field0<<" "<<field01<<" "<<std::endl;
-       //using "this" is one of the ways to get around templates 
+       //using "this" is one of the ways to get around TEMPLATES 
       std::cout<<this->field1<<" "<<this->field2<<" "<<std::endl;   
     };
 };
