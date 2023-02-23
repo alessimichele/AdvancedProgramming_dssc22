@@ -1,0 +1,29 @@
+# "hand-made" makefile
+
+CC = g++ -std=c++17
+
+INCDIR = include
+
+CFLAG = -c -I$(INCDIR)
+
+main.x: main.o class1.o class2.o
+	$(CC) -o $@ $^
+main.o: main.cpp
+	$(CC) $(CFLAG) $^
+class1.o: ./src/class1.cpp
+	$(CC) $(CFLAG) $^
+class2.o: ./src/class2.cpp
+	$(CC) $(CFLAG) $^
+clean:
+	rm -rf *.o *.x
+
+
+
+# a mano avrei dovuto fare:
+
+ #48  g++ -c main.cpp -Iinclude
+ #49  cd src
+ #50  g++ -c class1.cpp class2.cpp -Iinclude
+ #51  cd ..
+ #52  g++ -o main.x main.o ./src/class1.o ./src/class2.o
+ #53  ./main.x

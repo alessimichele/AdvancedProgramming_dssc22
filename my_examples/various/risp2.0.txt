@@ -1,0 +1,480 @@
+1. name at least 5 variable types in c++
+
+1. int, short int, double, bool, float, long int, char 
+
+
+2. what is "int overflow"?
+
+2. It is when we try to store into an 'int' variable an integer whose byte representation is larger than the number of bytes that type int can store.
+
+
+
+3. why `using namespace std` might not be a good idea?
+
+3. Because it can cause same conflicts with user-defined functions or with function coming from other library.
+
+
+
+4. which header do you have to include for the access to std::cout?
+
+4. <iostream>
+
+
+
+5. what would be the simplest "legal" program in c++?
+
+5. int main(){
+	}
+
+
+
+6. what is the difference in c++ between `struct` and `class`?
+
+6.  by default, struct's members are public while class ones are private.
+
+
+
+7. what does `break` statement do in a loop in c++?
+
+7. It immediately exit the loop.
+
+
+
+8. what does `continue` statement do in a loop?
+
+8. It skip the current iteration and go to the next iteration.
+
+
+
+9. how do you define a static array of type int and size 7?
+
+9. int array_name[7];
+
+
+
+10. what can you use to read interactive user input?
+
+10. We can include <iostream> header and use std::cin>>
+
+
+
+11. What is a reference?
+
+11. In c++, a reference is an alias for a variable. It should be initialized when declared.
+
+
+
+12. What is a difference between passing variables to functions by reference and by value?
+
+12. Difference is that if we pass a variable by value, the original variable don't get affected by any changes that might happen inside the function, while passing by reference do.
+Passing variables to function by value means to pass a copy of the variable, which makes the original variable not be affected by changes within the function. Instead, passing a  variable by reference makes the original variable be affected 
+
+
+
+13. Why do we want to pass variables to functions by reference rather than by pointer?
+
+13. Passing value by reference or by pointer is pretty similar. Basically passing by pointer is more C-style, and pass by pointer in c++ might cause misunderstanding if the forget wether we are dealing with sigle variable or array.
+
+
+ 
+14. If the function accepts pointers (signature `int function(int* a)`), how do you pass a variable defined as `int x` to it?
+
+14. &x
+
+
+
+15. Why do we want to use `const` modifier whenever possible?
+
+15. We want to use 'const' whenever possible for multiple reason: it makes us sure that our variable doesn't get changed inside the program and it helps the compiler to compile more efficient code.
+
+
+
+16. If you have a pointer named `p`, how do you access a value it points to? What is the name of that process?
+
+16. *p, dereferencing
+
+
+
+17. What value is stored in the pointer variable itself?
+
+17. In the pointer variable itself is stored the memory address of the variable the pointer points to.
+
+
+
+18. What can you say about a function that has signature `void function()`?
+
+18. We can say that the function "function" returns nothing and takes no input parameter.
+
+
+
+19. What is an `auto` keyword?
+
+19. It is a c++ keyword that make the compiler to automatically deduce the type of one variable or the return type of a function.
+
+
+ 
+20. What is function overloading?
+
+20. Function overloading is a c++ feature that allows for multiple function definition with the same name, but different number of parameters and type of the parameters.
+
+
+
+21. What is a recursive function?
+
+21. It is a function which calls itself.
+
+
+
+22. What is the role of a constructor in a class?
+
+22. A constructor in a class is used to create the instances of the class (that is, create the actual objects of the class). In addition, it can be used to also initialize those objects.
+
+
+
+23. How can we change private member variables of a class?
+
+23. We can change private member variables of a class using public member class defined ad hoc for changing private member. Another option is to use friend function, with the same purpose.
+
+
+
+24. How do you create an object file with `g++`?
+
+24. 'g++ -c filename.cpp'. This will output the object file filename.o
+
+
+
+25. Why can't you just have eveything in one file?
+
+25. There are many reasons: 
+	- efficiency. If only one part of the code get changed, if we keep code separate, only that part and parts depending on it has to be compiled, rather than all the code to be recompiled.
+	- easy-reading ("one screen" rule). It might be good practice to have short code in each file, to make the reading easier.
+	- easier error and names duplicate catching. If we keep our code divided into separate, it is easier to find error in the code and multiple declarations/definitions
+	- co-working. It is possible to work together on different piece of code
+
+
+
+26. What is the purpose of a "header guard"?
+
+26. Its purpose is to avoid multiple inclusion of the same function prototype/library/variable into a source file.
+A header guard is needed to avoid header files being included multiple times.
+
+
+
+27. What does `-IFOLDER_NAME` mean when passed to `g++`?
+
+27. It tells the compiler to check inside FOLDER_NAME directory for any header files included in the source code.
+
+
+
+28. Do tabs matter in a `Makefile`?
+
+28. Yes, the syntax is the following:
+	target: dependencies
+		rule
+
+
+
+29. What does `$@` mean in a `Makefile`?
+
+29. "Evaluate the target"
+
+
+
+30. What does `$^` mean in a `Makefile`?
+
+30. "Evaluate all the dependencies, separate by spaces"
+
+
+
+31. How to use `make` with a makefile that is not named `Makefile`?
+
+31. -f MyMakefile or --filename=MyMakefile
+
+
+
+32. What does it mean if a function is a friend of a class?
+
+32. A function friend of a class is a non-member function which has access to private member of that class.
+
+
+
+33. Why should non-class member operators be friends of classes?
+
+33. Operators are supposed to work with objects of the class, so they should have access to all private member of the class if we are planning to get private member involved in the operation. To achieve this, if operator is non-class member, we have to make it friend of the class
+
+NB to overload binary commutative operator, we are forced to use non-class member operators since member operators are only right hand side operand (ie we could overload object+val but not val+object
+
+
+
+34. Which header do you need to include to work with files?
+
+34. <fstream>
+
+
+
+35. How do you open a file in append mode?
+
+35. filevar.open('text.txt', std::ios_base::app)
+
+
+
+36. how do you allocate a dynamic array in C++?
+
+36. const int N; type* array; array = new type[N];
+
+
+	
+37. whats the difference between `delete` and `delete[]`?
+
+37. Both are used to free dynamic memory allocated on the heap. 'delete' is used for single data-type, while 'delete[]' is used to free array (so the compiler knows to look after the first memory location.
+
+
+
+38. when do you need to overload assignment operator for your class?
+
+38. we need to overload assignment operator when we need to perform deep copy of a object. In particular, if our class deals with dynamic memory management, assignment operator is needed. If it is not overloaded, by the default the compiler perform a shallow copy, that is assign to the left object the same memory address of the original object, and we end up with two different object sharing the same memory area. If we modify one object, the other object get also modified, which can cause error.
+
+
+
+39. when do you need to create a copy constructor for your class?
+
+39. Copy constructor is needed when we need a deep copy as well and also when we want to pass class object as parameters argument of a function by value. The reason are similar as the previous answer; by default the compiler perform a shallow copy of the object if copy constructor is not overloaded.
+
+
+
+40. when do you need to create a move constructor for your class?
+
+40. A move constructor is a constructor that transfers (or "steal") the ownership of the resources of the original variable and give it to the new variale, make the original one pending. It can be useful when we want efficient code, maybe working with big data, and we prefer to move resources rather than copy them. It is used often with temporary variable.
+
+A useful rule to remember is 0-3-5 rule. We could need no destructor, copy constructor and assignment operator; or if we need one of those, probably we need all of them. If we need also one of move constructor or move assignment operator, e need both (likely).
+
+
+
+41. what should you do if your class allocates resources, but you are sure you will never need a copy constructor?
+
+41. Use keyword delete, so it is clear what is happen in case of future issues. The syntax is:
+	MyClass(cost MyClass& MC){}=delete;
+
+
+
+42. what are protected class members?
+
+42. Protected class members are class members which are public for friend functions and for derived class and private for anything else.
+
+
+
+43. what are virtual functions?
+
+43. virtual functions are functions declared using 'virtual' keyword inside a base class, and they are ready to be overridden in each derived class, that is: each derived class could have its own specific implementation of that function. If none implementation is given within a derived class and that function is called on a derived class object, the base virtual function get called.
+
+
+
+44. what is an abstract class?
+
+44. Is a class which cannot have instances. It is create declaring at least one pure virtual function. An abstract class is often used as base class.
+
+
+
+45. explain dynamic (runtime) polymorphism
+
+45. Dynamic (runtime) polymorphism is a c++ feature that allows to refer to derived class objects through pointer to base class. When we call a virtual function on a pointer to the base class (using -> operator), at runtime it is resolved the correct implementation of the function, according to the actual type of the object the pointer is pointing to
+
+
+
+Dynamic (runtime) polymorphism is a c++ feature that allows a pointer to a base class to refer to objects of its derived classes, and the appropriate method of the derived class will be called at runtime when a virtual function is invoked through that pointer.
+In C++, dynamic polymorphism is achieved through the use of virtual functions. A virtual function is a member function of a class that can be redefined in a derived class, and that can be called through a pointer to a base class. When the virtual function is called through a base class pointer (using -> operator), the actual function that is called is determined by the type of the object that the pointer is pointing to, not by the type of the pointer itself.
+Dynamic polymorphism is useful because it allows us to write code that can work with objects of different classes without needing to know their specific types at compile time.
+
+
+
+46. why destructors should be made virtual?
+
+46. Destructor should be made virtual to assure that the correct destructor is called when a derived object is freed through a pointer to the base type.
+
+
+
+47. what is this `[](){}()`?
+
+47. It is a lambda function.
+
+
+
+48. what's the general structure of a lambda function?
+
+48. 
+
+
+
+49. what does "mutable" keyword do in a lambda function?
+
+49. 
+
+
+
+
+													python
+
+
+
+1. How do you create markdown cell in Jupyter? (with keyboard
+commands)
+
+1. 'm'
+
+
+
+2. How do you delete a cell in Jupyter (with keyboard command)?
+
+2. 'dd'
+
+
+
+3. How do you add a cell above the current one in Jupyter (with keyboard command)?
+
+3. 'a'
+
+
+
+4. What advantage does conda environment provide over a system-wide installation of python?
+
+4. Conda environment allows to have different versions of python on the same machine, without having them clashing together.
+
+
+
+5. What does it mean that variables are dynamically typed in python?
+
+5. It means that we don't need to declared the type of variable when defining it, and that the type of the variable can change during the execution.
+The type of a variable is determined at runtime, rather than being declared explicitly when the variable is defined. This means that you can assign a value of any type to a variable, and the interpreter will automatically determine the type based on the value that is assigned at runtime.
+
+
+
+6. What's the difference between python and C/C++ integers?
+
+6. c++ int are base data-type; they have fix number of bits and so can store only integer whose representation can be stored in that fixed number of bytes (or get int overflow) (ie: the range of values that can be represented by an integer is fixed, and it depends on the number of bits used to represent the integer).
+In Python, int is a class; this means we can call functions on int and also integer are implemented using a variable-length encoding, which means that they can use as many bits as needed to represent the value.
+
+
+
+7. Explain the difference between lists, sets and tuples in python.
+
+7. List: mutable, ordered, indexed, allow duplicates, allows slicing.
+Tuple: immutable, ordered, indexed, allow duplicates, allows slicing.
+Sets: mutable, unordered, doesn't allow duplicates, doesn't allow slicing.
+
+
+
+8. What does negative index mean when accessing list elements?
+
+8. It means to start the counting starting from the end of the list (-1 means the last element, -2 means the penultimate one)
+
+
+
+9. How do you print the first N elements of a list?
+
+9. list[:N]
+for i in range(N):
+	print(list[i])
+
+
+
+10. How do you print every Nth element of a list?
+
+10. list[::]
+for i in range(len(list)):
+		print(list[i])
+
+
+
+11. How do you print the reverse list?
+
+11. for i in range(1,len(list)+1):
+		print(list[-i])
+list[::-1]
+
+
+
+12. Give an example of a list comprehension.
+
+12. List = [i for i in range(10)]
+
+
+ 
+13. Give an example of cell and line magic commands in Jupyter.
+
+13. %%timeit (or %%file, %matplotlib inline, %%file, %%cython) is cell magic command in Jupyter.
+%timit is a line magic command.
+
+
+
+14. Write a "hello world" function in python (syntax errors are not ok in hello world even on paper).
+
+14. def helloworld():
+		print('hello, world!')
+		return
+
+
+
+15. What are keyword function arguments in python and what is their advantage?
+
+15. Keyword function arguments are name given to the argument of the function in the form "parameter_name = value". They allow to pass parameter to the function in the desired order. Furthermore, they improve the code explainability.
+
+
+
+16. Why shouldn't you do `from numpy import *`?
+
+16. Because that command will import the whole numpy library. This is discouraged; it can cause name conflict between user defined function or other package's functions. Furthermore it can occupy memory with function we don't even use.
+
+
+
+17. What is the advantage of using numpy arrays over lists? What are the dangers?
+
+17. Numpy arrays are much faster than list when dealing with numerical type, since they are optimized for that. Danger: it has fixed datatype.
+
+
+
+18. What's the most widely used package for plotting in python?
+
+18. pyplot from matplotlib
+
+
+
+19. What's the purpose of `__str__` method in a python class?
+
+19. To implement the analogue of print() function for the object of that class. It produce a representation of the objects into string. It is used to define how an instance of a class should be converted to a string representation. REPRESENT CLASS OBJECTS AS STRING, when use str(), __str__ method is called.
+
+
+
+20. What package can you use in python for symbolic calculations?
+
+20. Sympy
+
+
+
+21. What are decorators? Write an example (minor syntax errors are ok here)
+
+21. Decorators are special python function which takes a function as arguments and outputs another function that includes additional behavior or functionality.
+
+def decorator(function):
+	def wrapper(*args, **kwargs):
+		start = time.time()
+		result = function(*args, **kwargs)
+		end = time.time()
+		print(end-start)
+		return result
+	return wrapper
+@decorator
+def fun():
+	time.sleep(2)
+	return
+
+
+
+22. Name two ways of calling c++ code from python.
+
+22. ctype, cython, ppybind
+
+
+
+23. What is pandas? Name at least 5 functions from that package.
+
+23. .loc, .colnames, .mean, .median, .groupby

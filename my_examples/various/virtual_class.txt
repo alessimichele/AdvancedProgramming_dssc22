@@ -1,0 +1,40 @@
+what is a virtual function c++?
+In C++, a virtual function is a member function that is declared within a base class and redefined (overridden) by derived classes. It allows for dynamic dispatch, meaning that the function called at runtime will be based on the actual type of the object, rather than its static type. This allows for polymorphic behavior, where objects of different types can be treated as objects of the base type and the appropriate virtual function will be called based on the actual type of the object. The "virtual" keyword is used to declare a virtual function in the base class.
+
+
+
+alessimichele00@yahoo.it
+what is an abstract class c++?
+In C++, an abstract class is a class that cannot be instantiated on its own and is meant to serve as a base class for other classes. It is used to define a common interface for its derived classes to follow. An abstract class is defined by declaring one or more pure virtual functions, which are functions with no implementation (body) and are declared by using the "virtual" keyword followed by "= 0" in the function declaration. This signifies that the function is a pure virtual function and the derived classes must provide their own implementation. Classes derived from an abstract class must either provide implementations for all the pure virtual functions, or they must also be declared as abstract classes. Abstract classes provide a way to define a common interface for a group of related classes without having to provide a complete implementation.
+
+
+
+alessimichele00@yahoo.it
+ explain dynamic (runtime) polymorphism
+Dynamic polymorphism, also known as runtime polymorphism, is a feature in object-oriented programming that allows for objects of different types to be treated as objects of a common base type. This is achieved through the use of virtual functions.
+
+In C++, virtual functions allow for dynamic dispatch, meaning that the function called at runtime will be based on the actual type of the object, rather than its static type. This allows for polymorphic behavior, where objects of different types can be stored in a data structure of the base type, and the appropriate virtual function will be called based on the actual type of the object at runtime.
+
+Dynamic polymorphism is a powerful concept that enables a high degree of flexibility and code reusability. It enables you to write generic algorithms and data structures that can operate on objects of different types, without having to know the actual types of the objects at compile time. This makes it easier to extend your code to handle new types of objects in the future.
+
+
+
+alessimichele00@yahoo.it
+explain dynamic (runtime) polymorphism c++
+Dynamic polymorphism, also known as runtime polymorphism, in C++ refers to the ability of a function to behave differently based on the actual type of an object at runtime. It is implemented using virtual functions.
+
+A virtual function is a member function that is declared within a base class and redefined (overridden) by derived classes. The virtual keyword is used to declare a virtual function in the base class. When an object of a derived class is referred to through a pointer or a reference of the base class type, and a virtual function is called on that object, the function that is actually executed at runtime is determined by the actual type of the object, rather than the type of the pointer or reference. This allows for polymorphic behavior, where objects of different types can be treated as objects of a common base type, and the appropriate virtual function will be called based on the actual type of the object.
+
+Dynamic polymorphism allows for a high degree of flexibility and code reusability. It enables you to write generic algorithms and data structures that can operate on objects of different types, without having to know the actual types of the objects at compile time. This makes it easier to extend your code to handle new types of objects in the future.
+
+
+
+alessimichele00@yahoo.it
+why destructors should be made virtual? c++
+Destructors should be declared virtual in C++ when you have a class hierarchy and you want to ensure that the correct derived class destructor is called when an object is destroyed.
+
+In C++, when an object is destroyed, its destructor is called automatically. If a derived class object is referred to through a pointer or reference of the base class type and the base class destructor is not virtual, only the base class destructor will be called, and the derived class destructor will not be executed. This can result in resources not being properly freed and lead to memory leaks or other problems.
+
+By declaring the base class destructor virtual, you ensure that the correct derived class destructor will be called when an object is destroyed, regardless of whether the object is referred to through a pointer or reference of the base class type. This ensures that all resources are properly freed and any necessary clean-up is performed.
+
+In general, it is a good practice to make the destructors of base classes virtual when you have a class hierarchy, to ensure that the correct derived class destructors are called and resources are properly freed.

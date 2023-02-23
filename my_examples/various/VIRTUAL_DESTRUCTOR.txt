@@ -1,0 +1,81 @@
+why destructor might be made virtual in the context of c++ polymorphism class inheritance
+In C++ polymorphism and class inheritance, a virtual destructor is used to ensure proper destruction of objects when they are deleted through a pointer to a base class.
+
+Consider the following scenario: you have a base class Base and a derived class Derived. The Derived class inherits from the Base class and overrides one or more of its virtual functions. If an object of the Derived class is created and stored in a variable of type Base*, and then later deleted through that pointer, the base class destructor is called instead of the derived class destructor. This is because the type of the pointer is Base*, so the compiler only knows about the base class destructor.
+
+If the base class destructor is not virtual, the derived class destructor will not be called when deleting the object through a pointer to the base class. This can lead to memory leaks or other unexpected behavior, particularly if the derived class allocated any resources that need to be freed.
+
+To avoid this issue, the base class destructor should be declared as virtual. This will ensure that the correct destructor is called for any object of a derived class that is deleted through a pointer to the base class. 
+
+
+
+When a derived class has its own destructor, making the base class destructor virtual ensures that the derived class destructor is called when an object of the derived class is deleted through a pointer to the base class.
+
+
+
+alessimichele00@yahoo.it
+#include <iostream>
+//TL;DR: if destructor is not virtual, you risk leaking memory
+
+// if a function is not override, the base one gets called. So if we don't make the destructor in the base class virtual, can happen that 
+// destructor of derived class is not called when it should be. 
+
+template <typename T>
+class CBase1{
+public:    
+    T field1; 
+    CBase1(const T& f0):field1(f0){};
+   // virtual 
+    ~CBase1(){std::cout<<"base dctor called"<<std::endl;};
+};
+
+template <typename T>
+class CDerived1:public CBase1<T>{
+public:
+    T field2; 
+    T* arr;
+    CDerived1(const T& f0):CBase1<T>(f0){
+        field2=f0;
+        arr=new int[10];
+    };
+   ~CDerived1(){delete[] arr; std::cout<<"derived dctor called"<<std::endl;}
+};
+
+
+int main(){
+    
+// CDerived1<int> c(11);
+// std::cout<<c.field1<<" "<<c.field2<<std::endl;
+
+//this is how it's written in most examples/tutorials, but it hardly makes sense like that:
+//CBase1<int>* ptr=new CDerived1<int>(7);
+//instead: 
+CDerived1<int>* c1 = new CDerived1<int>(12);
+CBase1<int>* ptr=c1;
+delete ptr;
+
+return 0;   
+} 
+
+In the given code, the CDerived1 class inherits from the CBase1 class, and overrides the constructor and destructor. The CDerived1 class adds a new member variable arr and dynamically allocates an array in its constructor. The destructor of CDerived1 correctly deallocates the memory by deleting the array.
+
+The main function creates an object of CDerived1 class and then creates a pointer of CBase1 type and assigns it the address of the CDerived1 object. This is a common scenario in C++ inheritance, where a pointer to a base class is used to point to an object of a derived class.
+
+However, in the CBase1 class, the destructor is not declared as virtual, and this can cause issues when deleting objects of the derived class through a pointer to the base class. When a derived class object is deleted through a pointer to the base class, if the destructor of the base class is not virtual, then only the destructor of the base class will be called, and the destructor of the derived class will not be called. This can lead to memory leaks or other issues, particularly if the derived class has dynamically allocated resources that need to be freed.
+
+To fix this issue, the destructor of CBase1 should be declared as virtual. This will ensure that the destructor of the derived class is called when an object of the derived class is deleted through a pointer to the base class.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

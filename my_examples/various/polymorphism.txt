@@ -1,0 +1,85 @@
+virtual polymorphism c++ explain
+Virtual polymorphism is a mechanism in C++ where a call to a virtual function is dynamically bound to the correct implementation at runtime.
+
+A virtual function is declared with the "virtual" keyword in a base class, and can be overridden by derived classes to provide their own implementation. 
+
+When an object of a derived class is referred to through a pointer or reference of the base class type, the function call is resolved at runtime to the correct derived class's implementation.
+
+For example:
+
+csharp
+Copy code
+class Shape {
+   public:
+      virtual void draw() { cout << "Drawing a Shape" << endl; }
+};
+
+class Circle : public Shape {
+   public:
+      void draw() { cout << "Drawing a Circle" << endl; }
+};
+
+int main() {
+   Shape *shape = new Circle();
+   shape->draw();  // Output: "Drawing a Circle"
+   return 0;
+}
+In this example, draw() is declared as a virtual function in the base class Shape, and is overridden in the derived class Circle. When we create an object of type Circle and call draw() on a pointer to Shape, the correct implementation in Circle is called.
+
+
+
+alessimichele00@yahoo.it
+what "virtual" keyword means in a base class?
+The "virtual" keyword in a base class in C++ is used to declare a virtual function. A virtual function is a member function that can be overridden in derived classes.
+
+When a virtual function is called through a reference or pointer to an object of a base class, the call is dynamically bound at runtime to the correct implementation in the most derived class. This allows for polymorphic behavior, where a single function call can behave differently depending on the actual type of the object.
+
+For example:
+
+csharp
+Copy code
+class Shape {
+   public:
+      virtual void draw() { cout << "Drawing a Shape" << endl; }
+};
+
+class Circle : public Shape {
+   public:
+      void draw() { cout << "Drawing a Circle" << endl; }
+};
+
+int main() {
+   Shape *shape = new Circle();
+   shape->draw();  // Output: "Drawing a Circle"
+   return 0;
+}
+In this example, the draw() function is declared as a virtual function in the Shape base class. When the draw() function is called through a pointer to Shape, it dynamically calls the correct implementation in the derived class Circle.
+
+
+
+alessimichele00@yahoo.it
+what means "A virtual function is a member function that can be overridden in derived classes."
+A virtual function is a member function in a base class that can be redefined (overridden) in derived classes. When a virtual function is declared in a base class, any derived class can provide its own implementation of the function, effectively replacing the implementation in the base class.
+
+At runtime, when a virtual function is called through a reference or pointer to an object of the base class type, the call is dynamically resolved to the correct implementation in the most derived class. This allows for polymorphic behavior, where a single function call can behave differently depending on the actual type of the object.
+
+For example:
+
+csharp
+Copy code
+class Shape {
+   public:
+      virtual void draw() { cout << "Drawing a Shape" << endl; }
+};
+
+class Circle : public Shape {
+   public:
+      void draw() { cout << "Drawing a Circle" << endl; }
+};
+
+int main() {
+   Shape *shape = new Circle();
+   shape->draw();  // Output: "Drawing a Circle"
+   return 0;
+}
+In this example, the draw() function is declared as a virtual function in the Shape base class. The Circle derived class provides its own implementation of draw(), which replaces the implementation in the Shape base class. When the draw() function is called through a pointer to Shape, it dynamically calls the correct implementation in the derived class Circle.
